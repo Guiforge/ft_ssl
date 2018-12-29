@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
+#    By: gpouyat <gpouyatstudent.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/23 09:03:46 by gpouyat           #+#    #+#              #
-#    Updated: 2018/12/21 20:52:34 by gpouyat          ###   ########.fr        #
+#    Updated: 2018/12/22 16:16:45 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,10 @@ CC = gcc
 
 FLAGS = -Wall -Wextra -Werror
 
+ifeq ($(DEBUG),yes)
+    FLAGS		+= -D DEBUG
+endif
+
 ifeq ($(DEV),yes)
     FLAGS		+= -g
 endif
@@ -23,6 +27,7 @@ endif
 ifeq ($(SAN),yes)
     FLAGS		+= -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
 endif
+
 
 NAME = ft_ssl
 
@@ -33,73 +38,52 @@ C_B = \033[1;34m
 C_C = \033[1;36m
 C_R = \033[1;31m
 
-SRC_PATH_SSL = ./srcs/ssl
-SRC_PATH_MD5 = ./srcs/md5
-# SRC_PATH_MISC = ./srcs/misc
+#### PATH
+SRC_PATH = ./srcs
 LIB_PATH = ./libft
 INC_PATH = ./includes
-INC_LIB = ./libft/includes
 OBJ_PATH = ./obj
-OBJ_PATH_SSL = ./obj/ssl
-OBJ_PATH_MD5 = ./obj/md5
-# OBJ_PATH_MISC = ./obj/misc
+INC_PATH_LIB = $(LIB_PATH)/$(INC_PATH)
 
-SRC_NAME_SSL = main.c
+#### SRCS
+SRC_NAME += ssl/main.c md5/md5.c md5/padding.c
 
-SRC_NAME_MD5 = main.c
 
-# SRC_NAME_MISC = option.c
+# vpath  %c $(addprefix $(SRCS_PATH)/,$(SRC_SUBDIR))
 
-OBJ_NAME_SSL = $(SRC_NAME_SSL:.c=.o)
-OBJ_NAME_MD5 = $(SRC_NAME_MD5:.c=.o)
-# OBJ_NAME_MISC = $(SRC_NAME_MISC:.c=.o)
+
+HEADERS = ft_ssl.h
+
+OBJ_NAME = $(SRC_NAME:.c=.o)
 LIB_NAME = libft.a
 
-SRC_SSL = $(addprefix $(SRC_PATH_SSL)/, $(SRC_NAME_SSL))
-SRC_MD5 = $(addprefix $(SRC_PATH_MD5)/, $(SRC_NAME_MD5))
-# SRC_MISC = $(addprefix $(SRC_PATH_MISC)/, $(SRC_NAME_MISC))
+
+SRC = $(addprefix $(SRC_PATH)/, $(SRC_NAME))
 LIB = $(addprefix $(LIB_PATH)/, $(LIB_NAME))
-# OBJ_SSL = $(addprefix $(OBJ_PATH_SSL)/,$(OBJ_NAME_SSL))
-OBJ_MD5 = $(addprefix $(OBJ_PATH_MD5)/,$(OBJ_NAME_MD5))
-OBJ_MISC = $(addprefix $(OBJ_PATH_MISC)/,$(OBJ_NAME_MISC))
+OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_NAME))
+HEAD = $(addprefix $(INC_PATH)/, $(HEADERS))
 
-all: $(NAME_SSL)
+all: $(NAME)
 
-$(NAME_SSL): $(LIB) $(OBJ_MISC) $(OBJ_SSL) $(OBJ_MD5)
-	$(CC) -o $(NAME_SSL) $(FLAGS) $(OBJ_SSL) $(OBJ_MD5) $(LIB)
-	@printf "$(C_G)%-20s\t$(C_Y)Compilation\t$(C_G)[ OK ✔ ]$(C_NO)\n\n" $(NAME_SSL)
+$(NAME): $(LIB) $(OBJ) $(HEAD)
+	$(CC) -o $(NAME) $(FLAGS) $(OBJ) $(LIB)
+	@printf "$(C_G)\n%-20s\t$(C_Y)Compilation\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
 
-$(OBJ_PATH_SSL)/%.o: $(SRC_PATH_SSL)/%.c
-	@mkdir -p $(OBJ_PATH) $(OBJ_PATH_SSL)
-	$(CC) $(FLAGS) -o $@ -c $< -I $(INC_PATH) -I $(INC_LIB)
-
-$(OBJ_PATH_MD5)/%.o: $(SRC_PATH_MD5)/%.c
-	@mkdir -p $(OBJ_PATH) $(OBJ_PATH_MD5)
-	$(CC) $(FLAGS) -o $@ -c $< -I $(INC_PATH) -I $(INC_LIB)
-
-#$(OBJ_PATH_MISC)/%.o: $(SRC_PATH_MISC)/%.c
-#	@mkdir -p $(OBJ_PATH) $(OBJ_PATH_MISC)
-#	$(CC) $(FLAGS) -o $@ -c $< -I $(INC_PATH) -I $(INC_LIB)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
+	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/ssl $(OBJ_PATH)/md5
+	$(CC) $(FLAGS) -o $@ -c $< -I $(INC_PATH) -I $(INC_PATH_LIB)
 
 $(LIB):
-	@make -C $(LIB_PATH) DEV=$(DEV) SAN=$(SAN)
-
-miniclean:
-	@rm -rf $(OBJ_SSL)
-	@rm -rf $(OBJ_MD5)
-	@printf "$(C_B)%-20s\t$(C_Y)Cleaning obj\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME_SSL) $(NAME_MD5)
+	make -C $(LIB_PATH)
 
 clean:
-	@rm -rf $(OBJ_SSL)
-	@rm -rf $(OBJ_MD5)
-	@make -C $(LIB_PATH) clean
-	@printf "$(C_B)%-20s\t$(C_Y)Cleaning obj\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME_SSL) $(NAME_MD5)
+	rm -rf $(OBJ)
+	make -C $(LIB_PATH) clean
+	@printf "$(C_B)%-20s\t$(C_Y)Cleaning obj\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
 
-fclean:
-	@rm -rf ./obj $(NAME_SSL) $(NAME_MD5)
-	@make -C $(LIB_PATH) fclean
-	@printf "$(C_B)%-20s\t$(C_Y)Cleaning binary\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME_SSL) $(NAME_MD5)
-
-minire: clean all
+fclean: 
+	rm -rf ./obj $(NAME)
+	make -C $(LIB_PATH) fclean
+	@printf "$(C_B)%-20s\t$(C_Y)Cleaning binary\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
 
 re: fclean all
