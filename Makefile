@@ -46,7 +46,7 @@ OBJ_PATH = ./obj
 INC_PATH_LIB = $(LIB_PATH)/$(INC_PATH)
 
 #### SRCS
-SRC_NAME += ssl/main.c md5/md5.c md5/padding.c
+SRC_NAME += ssl/main.c md5/md5.c md5/operations.c md5/init.c md5/update.c md5/final.c
 
 
 # vpath  %c $(addprefix $(SRCS_PATH)/,$(SRC_SUBDIR))

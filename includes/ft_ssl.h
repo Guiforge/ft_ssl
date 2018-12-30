@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2018/12/28 23:06:02 by gpouyat          ###   ########.fr       */
+/*   Updated: 2018/12/30 23:01:41 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,31 @@ typedef struct			s_md5_flags {
 }						t_md5_flags;
 
 typedef struct			s_md5_context {
-	unsigned int		h0;// = 0x67452301
-	unsigned int		h1;// = 0xEFCDAB89
-	unsigned int		h2;// = 0x98BADCFE
-	unsigned int		h3;// = 0x10325476
+	uint32_t			h0;// = 0x67452301
+	uint32_t			h1;// = 0xEFCDAB89
+	uint32_t			h2;// = 0x98BADCFE
+	uint32_t			h3;// = 0x10325476
 	unsigned char		buffer[MD5_BUFFER_CNTX];
 	size_t				len; 
 	unsigned char		buff_bytes;
 }						t_md5_context;
 
+typedef struct			s_md5_operaions_value {
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
+	uint32_t	*data;
+}						t_md5_operaions_value;
+
 t_array_byte	md5_padding(t_array_byte bits);
 
 
-
 char	*md5(int ac, const char **av);
+void	md5_init(t_md5_context *cntx);
+void	md5_operations(t_md5_context *cntx);
+void	md5_update(t_md5_context *cntx, unsigned char *data, size_t size);
+void	md5_final(t_md5_context *cntx, unsigned char data[16]);
 /*
 ** ***********************************************************************
 */
