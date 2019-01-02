@@ -12,6 +12,30 @@
 
 #include "../../includes/ft_ssl.h"
 
+int	parse_options(t_md5_flags *flags, int ac, char const *av[])
+{
+	int		opt;
+
+	ft_bzero((void *)flags, sizeof(flags));
+	while ((opt = ft_getopt(ac, av, "pqrs:")) != -1)
+	{
+		if (opt == 'p')
+			flags->p = True;
+		if (opt == 'q')
+			flags->q = True;
+		if (opt == 'r')
+			flags->r = True;
+		if (opt == 's')
+			flags->s = True;
+		if (opt == 'h')
+			return (1);
+		if (opt == '?')
+			return (1);
+	}
+	return (0);
+}
+
+
 char	*md5(int ac, const char **av)
 {
 	t_md5_context	cntx;

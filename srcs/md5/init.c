@@ -15,14 +15,13 @@
 void	md5_init(t_md5_context *cntx)
 {
 	if (cntx)
-	{	
+	{
 		cntx->h0 = 0x67452301;
 		cntx->h1 = 0xEFCDAB89;
 		cntx->h2 = 0x98BADCFE;
 		cntx->h3 = 0x10325476;
-		ft_bzero(cntx->buffer, sizeof(cntx->buffer));
+		buffer512_clean(&(cntx->buffer));
 		cntx->len = 0;
-		cntx->buff_bytes = 0;
 	}
 	else
 		log_fatal("Md5: error context invalid (NULL)");

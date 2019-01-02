@@ -22,6 +22,18 @@
 
 #define HELP_USAGE "usage: ft_ssl command [command opts] [command args]"
 
+/*
+** MISC
+*/
+typedef struct			s_buffer512 {
+	unsigned char		buff[64];
+	unsigned char		buff_bytes;
+}									t_buffer512;
+
+void		buffer512_clean(t_buffer512 *buffer512);
+t_bool	buffer512_is_full(t_buffer512 *buffer512);
+void		buffer512_fill(t_buffer512 *buffer512, unsigned char *data, size_t size, size_t *index);
+
 
 /*
 **	MD5
@@ -31,7 +43,11 @@
 #define MD5_ERROR_SIZE_64 "md5: Error size_t is not unsigned long"
 #define MD5_BUFFER_CNTX 64
 typedef struct			s_md5_flags {
-	t_bool				a;
+	t_bool				p;
+	t_bool				q;
+	t_bool				r;
+	t_bool				s;
+
 }						t_md5_flags;
 
 typedef struct			s_md5_context {
@@ -39,9 +55,8 @@ typedef struct			s_md5_context {
 	uint32_t			h1;// = 0xEFCDAB89
 	uint32_t			h2;// = 0x98BADCFE
 	uint32_t			h3;// = 0x10325476
-	unsigned char		buffer[MD5_BUFFER_CNTX];
-	size_t				len; 
-	unsigned char		buff_bytes;
+	t_buffer512			buffer;
+	size_t				len;
 }						t_md5_context;
 
 typedef struct			s_md5_operaions_value {

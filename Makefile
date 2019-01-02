@@ -3,33 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gpouyat <gpouyatstudent.42.fr>            +#+  +:+       +#+         #
+#    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/04/23 09:03:46 by gpouyat           #+#    #+#              #
-#    Updated: 2018/12/22 16:16:45 by gpouyat          ###   ########.fr        #
+#    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
+#    Updated: 2018/12/30 22:38:25 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+# .NOTPARALLEL:
+
 .PHONY: all clean fclean re
-
-CC = gcc
-
-FLAGS = -Wall -Wextra -Werror
-
-ifeq ($(DEBUG),yes)
-    FLAGS		+= -D DEBUG
-endif
-
-ifeq ($(DEV),yes)
-    FLAGS		+= -g
-endif
-
-ifeq ($(SAN),yes)
-    FLAGS		+= -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
-endif
-
-
-NAME = ft_ssl
 
 C_NO = \033[0m
 C_G = \033[0;32m
@@ -38,52 +21,87 @@ C_B = \033[1;34m
 C_C = \033[1;36m
 C_R = \033[1;31m
 
-#### PATH
-SRC_PATH = ./srcs
-LIB_PATH = ./libft
-INC_PATH = ./includes
-OBJ_PATH = ./obj
-INC_PATH_LIB = $(LIB_PATH)/$(INC_PATH)
+SRC_SUBDIR 		= ssl
+SRCS			+= main.c
 
-#### SRCS
-SRC_NAME += ssl/main.c md5/md5.c md5/operations.c md5/init.c md5/update.c md5/final.c
+SRC_SUBDIR 		+= md5
+SRCS			+= md5.c init.c final.c operations.c update.c
 
+SRC_SUBDIR		+= misc
+SRCS			+= buffer512.c
 
-# vpath  %c $(addprefix $(SRCS_PATH)/,$(SRC_SUBDIR))
+###############################################################################
 
+#  Compiler
 
-HEADERS = ft_ssl.h
+NAME 			= ft_ssl
+CC			= cc
+CFLAGS			= -Wall -Wextra -Werror
 
-OBJ_NAME = $(SRC_NAME:.c=.o)
-LIB_NAME = libft.a
+ifeq ($(DEBUG), yes)
+	CFLAGS		+= -D DEBUG
+endif
 
+ifeq ($(DEV),yes)
+    CFLAGS		+= -g
+endif
 
-SRC = $(addprefix $(SRC_PATH)/, $(SRC_NAME))
-LIB = $(addprefix $(LIB_PATH)/, $(LIB_NAME))
-OBJ = $(addprefix $(OBJ_PATH)/, $(OBJ_NAME))
-HEAD = $(addprefix $(INC_PATH)/, $(HEADERS))
+ifeq ($(SAN),yes)
+    CFLAGS		+= -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
+endif
+
+#The Directories, Source, Includes, Objects and Libraries
+INC			= -I includes
+SRCS_DIR		= srcs
+
+vpath  %c $(addprefix $(SRCS_DIR)/, $(SRC_SUBDIR))
+
+#Objects
+OBJS_DIR		= objs
+ OBJS			= $(SRCS:%.c=$(OBJS_DIR)/%.o)
+
+BUILD_DIR		= $(OBJS_DIR)
+
+#Utils
+RM			= rm -rf
+MKDIR			= mkdir -p
+
+#LIB
+LIB_PATH		= libft
+LIB_NAME		= libft.a
+LIB			= $(LIB_PATH)/$(LIB_NAME)
+
+COUNT = 0
+TOTAL = 0
+PERCENT = 0
+$(eval TOTAL=$(shell echo $$(printf "%s" "$(SRCS)" | wc -w)))
+###############################################################################
+
 
 all: $(NAME)
 
-$(NAME): $(LIB) $(OBJ) $(HEAD)
-	$(CC) -o $(NAME) $(FLAGS) $(OBJ) $(LIB)
-	@printf "$(C_G)\n%-20s\t$(C_Y)Compilation\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
+$(NAME): $(LIB) $(OBJS)
+	$(CC) -o $(NAME) $(CFLAGS) $(OBJS) $(LIB)
+	@echo
+	@echo "[\033[35m---------------------------------\033[0m]"
+	@echo "[\033[36m------- Compilation Done! -------\033[0m]"
+	@echo "[\033[35m---------------------------------\033[0m]"
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	mkdir -p $(OBJ_PATH) $(OBJ_PATH)/ssl $(OBJ_PATH)/md5
-	$(CC) $(FLAGS) -o $@ -c $< -I $(INC_PATH) -I $(INC_PATH_LIB)
+$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+	$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
+	$(eval PERCENT=$(shell echo $$((($(COUNT) * 100 )/$(TOTAL)))))
+	@printf "$(C_B)%-8s $(C_Y) $<$(C_NO)                                           \n" "[$(PERCENT)%]"
 
-$(LIB):
-	make -C $(LIB_PATH)
+$(BUILD_DIR):
+	@$(MKDIR) $@
 
 clean:
-	rm -rf $(OBJ)
-	make -C $(LIB_PATH) clean
-	@printf "$(C_B)%-20s\t$(C_Y)Cleaning obj\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
+	@echo "\033[35m$(NAME)  :\033[0m [\033[31mSuppression des .o\033[0m]"
+	@$(RM) $(OBJS_DIR)
 
-fclean: 
-	rm -rf ./obj $(NAME)
-	make -C $(LIB_PATH) fclean
-	@printf "$(C_B)%-20s\t$(C_Y)Cleaning binary\t$(C_G)[ OK ✔ ]$(C_NO)\n" $(NAME)
+fclean: clean
+	@echo "\033[35m$(NAME)  :\033[0m [\033[31mSuppression de $(NAME)\033[0m]"
+	@$(RM) $(NAME)
 
 re: fclean all

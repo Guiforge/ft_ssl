@@ -36,7 +36,7 @@ static void md5_operations_init_val(t_md5_context *cntx,
 	val->b = cntx->h1;
 	val->c = cntx->h2;
 	val->d = cntx->h3;
-	val->data = (uint32_t *)cntx->buffer;
+	val->data = (uint32_t *)cntx->buffer.buff;
 }
 
 static void md5_operations_end_loop(t_md5_operaions_value *val, uint32_t f,

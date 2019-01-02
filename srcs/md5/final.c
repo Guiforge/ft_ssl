@@ -36,17 +36,17 @@ static size_t	find_padding_nb(size_t len)
 
 static	void	padding(t_md5_context *cntx)
 {
-	size_t			size_padd;
+	size_t		size_padd;
 	unsigned char	padd[64];
 	unsigned char	super_padd;
-	size_t			len_tmp;
+	size_t		len_tmp;
 
 	super_padd = 0x80;
 	ft_bzero(padd, sizeof(padd));
 	ft_memcpy(padd, &super_padd, 1);
 	len_tmp = cntx->len * 8;
 	md5_update(cntx, padd, find_padding_nb(cntx->len));
-	size_padd = MD5_BUFFER_CNTX - cntx->buff_bytes;
+	size_padd = MD5_BUFFER_CNTX - cntx->buffer.buff_bytes;
 	if (size_padd >= MD5_BUFFER_CNTX || size_padd != 8)
 		log_fatal("%lu != 8, func: %s:%u", size_padd, __FUNCTION__, __LINE__);
 	md5_update(cntx, (unsigned char *)&len_tmp, 8);
