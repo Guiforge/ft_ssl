@@ -6,13 +6,49 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2018/12/30 23:10:26 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/03 16:58:43 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-int	parse_options(t_md5_flags *flags, int ac, char const *av[])
+extern char const	*g_optarg;
+extern int			g_optind; //&av[g_optind]
+
+static void	md5_exec_string(t_md5_flags flags, t_list *lst)
+{
+	unsigned char sum[16];
+
+	log_info("Start exec strings");
+	while(lst)
+	{
+		if (!lst->content)
+		{
+			log_error("Md5: No string in %s:%d", __FUNCTION__, __LINE__);
+			ft_dprintf(STDERR_FILENO, "Md5: No string in option s");
+			return;
+		}
+		md5_get_sum_string(lst->content, sum);
+		md5_print_string(flags, sum, lst->content);
+		lst = lst->next;
+	}
+}
+
+static void md5_exec_files(t_md5_flags flags, const char **av)
+{
+	unsigned char	sum[16];
+
+	log_info("Start exec files");
+	while(av && *av)
+	{
+		log_debug("file: %s", *av);
+		if (md5_get_sum_file(*av, sum) != -1)
+			md5_print(flags, sum, *av);
+		av++;
+	}
+}
+
+int		parse_options(t_md5_flags *flags, int ac, char const *av[], t_list **lst_str)
 {
 	int		opt;
 
@@ -26,30 +62,40 @@ int	parse_options(t_md5_flags *flags, int ac, char const *av[])
 		if (opt == 'r')
 			flags->r = True;
 		if (opt == 's')
-			flags->s = True;
-		if (opt == 'h')
-			return (1);
-		if (opt == '?')
+			ft_lstpush_new_secu(lst_str, g_optarg, sizeof(g_optarg)
+																, M_LVL_FUNCT);
+		if (opt == 'h' || opt == '?')
 			return (1);
 	}
 	return (0);
 }
 
-
-char	*md5(int ac, const char **av)
+static void	help_usage(void)
 {
-	t_md5_context	cntx;
-	unsigned char	data[16];
+	ft_putendl("usage: md5 [-pqrh] [-s [ARG]] [file ...]");
+}
 
-	(void)ac;
+void		md5(int ac, const char **av)
+{
+	t_md5_flags		flags;
+	t_list			*lst_str;
+	unsigned char	sum[16];
+
+	lst_str = NULL;
 	if (sizeof(size_t) != 8)
 	{
 		log_fatal("%s, sizeof(size_t): %lu", MD5_ERROR_SIZE_64, sizeof(size_t));
-		return(over_str(MD5_ERROR_SIZE_64));
+		return((void)over(MD5_ERROR_SIZE_64, 0));
 	}
-	md5_init(&cntx);
-	md5_update(&cntx, (unsigned char *)av[1], ft_strlen(av[1]));
-	md5_final(&cntx, data);
-    for(int i = 0; i < 16; i++) printf("%02x", data[i]);
-	return (NULL);
+	if (parse_options(&flags, ac, av, &lst_str))
+		return(help_usage());
+	if (flags.p || (!lst_str && g_optind == ac))
+	{
+		md5_get_sum_out(sum, flags.p);
+		md5_put_sum(sum);
+		ft_putchar('\n');
+	}
+	md5_exec_string(flags, lst_str);
+	md5_exec_files(flags, &av[g_optind]);
+	ft_secu_free_lvl(M_LVL_FUNCT);
 }

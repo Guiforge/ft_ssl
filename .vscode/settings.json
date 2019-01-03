@@ -10,5 +10,6 @@
 		"limits.h": "c",
 		"stdio.h": "c"
 	},
-	"C_Cpp.errorSquiggles": "Disabled"
+	"C_Cpp.errorSquiggles": "Disabled",
+	"python.pythonPath": "/usr/local/bin/python3"
 }

@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2018/12/30 22:38:25 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/03 15:35:32 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SRC_SUBDIR 		= ssl
 SRCS			+= main.c
 
 SRC_SUBDIR 		+= md5
-SRCS			+= md5.c init.c final.c operations.c update.c
+SRCS			+= final.c get.c init.c md5.c operations.c print_sum.c update.c
 
 SRC_SUBDIR		+= misc
 SRCS			+= buffer512.c

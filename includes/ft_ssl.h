@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2018/12/30 23:01:41 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/03 16:21:08 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct			s_buffer512 {
 }									t_buffer512;
 
 void		buffer512_clean(t_buffer512 *buffer512);
-t_bool	buffer512_is_full(t_buffer512 *buffer512);
+t_bool		buffer512_is_full(t_buffer512 *buffer512);
 void		buffer512_fill(t_buffer512 *buffer512, unsigned char *data, size_t size, size_t *index);
 
 
@@ -67,10 +67,15 @@ typedef struct			s_md5_operaions_value {
 	uint32_t	*data;
 }						t_md5_operaions_value;
 
-t_array_byte	md5_padding(t_array_byte bits);
+void		md5_put_sum(unsigned char sum[16]);
+void		md5_print(t_md5_flags flags, unsigned char sum[16], const char *s);
+void		md5_print_string(t_md5_flags flags, unsigned char sum[16], const char *s);
 
+void		md5_get_sum_string(const char *s, unsigned char data[16]);
+ssize_t		md5_get_sum_file(const char *filename, unsigned char data[16]);
+ssize_t		md5_get_sum_out(unsigned char data[16], t_bool	print);
 
-char	*md5(int ac, const char **av);
+void	md5(int ac, const char **av);
 void	md5_init(t_md5_context *cntx);
 void	md5_operations(t_md5_context *cntx);
 void	md5_update(t_md5_context *cntx, unsigned char *data, size_t size);
