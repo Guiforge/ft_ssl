@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/03 16:58:43 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 15:00:13 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ int		parse_options(t_md5_flags *flags, int ac, char const *av[], t_list **lst_st
 		if (opt == 'r')
 			flags->r = True;
 		if (opt == 's')
-			ft_lstpush_new_secu(lst_str, g_optarg, sizeof(g_optarg)
-																, M_LVL_FUNCT);
+			ft_lstpush_extra_secu(lst_str, g_optarg, 42, M_LVL_FUNCT);
 		if (opt == 'h' || opt == '?')
 			return (1);
 	}
@@ -91,7 +90,7 @@ void		md5(int ac, const char **av)
 		return(help_usage());
 	if (flags.p || (!lst_str && g_optind == ac))
 	{
-		md5_get_sum_out(sum, flags.p);
+		md5_get_sum_out(sum, flags.p && !flags.q);
 		md5_put_sum(sum);
 		ft_putchar('\n');
 	}

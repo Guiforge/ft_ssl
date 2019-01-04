@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2019/01/03 15:35:32 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/04 14:49:48 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ MKDIR			= mkdir -p
 #LIB
 LIB_PATH		= libft
 LIB_NAME		= libft.a
-LIB			= $(LIB_PATH)/$(LIB_NAME)
+LIB				= $(LIB_PATH)/$(LIB_NAME)
 
 COUNT = 0
 TOTAL = 0
@@ -88,20 +88,25 @@ $(NAME): $(LIB) $(OBJS)
 	@echo "[\033[35m---------------------------------\033[0m]"
 
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
-	@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 	$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 	$(eval PERCENT=$(shell echo $$((($(COUNT) * 100 )/$(TOTAL)))))
-	@printf "$(C_B)%-8s $(C_Y) $<$(C_NO)                                           \n" "[$(PERCENT)%]"
+	@printf "$(C_B)%-8s $(C_NO)" "[$(PERCENT)%]"
 
 $(BUILD_DIR):
 	@$(MKDIR) $@
 
+$(LIB):
+	make DEBUG=$(DEBUG) DEV=$(DEV) SAN=$(SAN) -C $(LIB_PATH)
+
 clean:
 	@echo "\033[35m$(NAME)  :\033[0m [\033[31mSuppression des .o\033[0m]"
-	@$(RM) $(OBJS_DIR)
+	$(RM) $(OBJS_DIR)
+	make clean -C $(LIB_PATH)
 
 fclean: clean
 	@echo "\033[35m$(NAME)  :\033[0m [\033[31mSuppression de $(NAME)\033[0m]"
-	@$(RM) $(NAME)
+	$(RM) $(NAME)
+	make fclean -C $(LIB_PATH)
 
 re: fclean all
