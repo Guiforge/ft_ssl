@@ -6,45 +6,41 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:51:06 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 16:54:30 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-static int			g_r[64] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,\
-	7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4,\
-	11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 6,\
-	10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
 
-static unsigned int	g_k[64] = {3614090360, 3905402710, 606105819, 3250441966,\
-	4118548399, 1200080426, 2821735955, 4249261313,\
-	1770035416, 2336552879, 4294925233, 2304563134,\
-	1804603682, 4254626195, 2792965006, 1236535329,\
-	4129170786, 3225465664, 643717713, 3921069994,\
-	3593408605, 38016083, 3634488961, 3889429448,\
-	568446438, 3275163606, 4107603335, 1163531501,\
-	2850285829, 4243563512, 1735328473, 2368359562,\
-	4294588738, 2272392833, 1839030562, 4259657740,\
-	2763975236, 1272893353, 4139469664, 3200236656,\
-	681279174, 3936430074, 3572445317, 76029189,\
-	3654602809, 3873151461, 530742520, 3299628645,\
-	4096336452, 1126891415, 2878612391, 4237533241,\
-	1700485571, 2399980690, 4293915773, 2240044497,\
-	1873313359, 4264355552, 2734768916, 1309151649,\
-	4149444226, 3174756917, 718787259, 3951481745};
+static unsigned int	g_k[64] = { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,\
+	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,\
+	0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,\
+	0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa,\
+	0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7,\
+	0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138,\
+	0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,\
+	0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624,\
+	0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,\
+	0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f,\
+	0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+};
 
-static void			md5_operations_init_val(t_md5_context *cntx,
-												t_md5_operations_value *val)
+static void			sha256_operations_init_val(t_sha256_context *cntx,
+												t_sha256_operations_value *val)
 {
 	val->a = cntx->h0;
 	val->b = cntx->h1;
 	val->c = cntx->h2;
 	val->d = cntx->h3;
+	val->e = cntx->h4;
+	val->f = cntx->h5;
+	val->g = cntx->h6;
+	val->h = cntx->h7;
 	val->data = (uint32_t *)cntx->buffer.buff;
 }
 
-static void			md5_operations_end_loop(t_md5_operations_value *val,
+static void			sha256_operations_end_loop(t_sha256_operaions_value *val,
 									uint32_t f, unsigned char i, uint32_t g)
 {
 	uint32_t		tmp;
@@ -56,7 +52,7 @@ static void			md5_operations_end_loop(t_md5_operations_value *val,
 	val->a = tmp;
 }
 
-static void			md5_operations_loop(t_md5_operations_value *val,
+static void			sha256_operations_loop(t_sha256_operaions_value *val,
 															unsigned char i)
 {
 	uint32_t	f;
@@ -82,19 +78,19 @@ static void			md5_operations_loop(t_md5_operations_value *val,
 		f = val->c ^ (val->b | (~val->d));
 		g = (7 * i) % 16;
 	}
-	md5_operations_end_loop(val, f, i, g);
+	sha256_operations_end_loop(val, f, i, g);
 }
 
-void				md5_operations(t_md5_context *cntx)
+void				sha256_operations(t_sha256_context *cntx)
 {
-	t_md5_operations_value	val;
+	t_sha256_operaions_value	val;
 	unsigned char			i;
 
 	i = 0;
-	md5_operations_init_val(cntx, &val);
+	sha256_operations_init_val(cntx, &val);
 	while (i != 64)
 	{
-		md5_operations_loop(&val, i);
+		sha256_operations_loop(&val, i);
 		i++;
 	}
 	cntx->h0 = cntx->h0 + val.a;

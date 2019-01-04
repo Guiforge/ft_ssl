@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:38:27 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 16:39:42 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ static size_t	find_padding_nb(size_t len)
 	while (++len % 512 != 448)
 	{
 		if (len == ULLONG_MAX)
-			return (over_p("md5:", SSL_ERROR_PADDING, 0));
+			return (over_p("sha256:", SSL_ERROR_PADDING, 0));
 	}
 	if (len % 8)
 	{
-		log_fatal("md5: padding en is not a multiple of 8 len: %lu", len);
-		return (over_p("md5:", SSL_ERROR_PADDING, 0));
+		log_fatal("sha256: padding en is not a multiple of 8 len: %lu", len);
+		return (over_p("sha256:", SSL_ERROR_PADDING, 0));
 	}
 	log_func_end(__FUNCTION__);
 	return ((len - start) / 8);
 }
 
-static	void	padding(t_md5_context *cntx)
+static	void	padding(t_sha256_context *cntx)
 {
 	size_t			size_padd;
 	unsigned char	padd[64];
@@ -45,14 +45,14 @@ static	void	padding(t_md5_context *cntx)
 	ft_bzero(padd, sizeof(padd));
 	ft_memcpy(padd, &super_padd, 1);
 	len_tmp = cntx->len * 8;
-	md5_update(cntx, padd, find_padding_nb(cntx->len));
-	size_padd = MD5_BUFFER_CNTX - cntx->buffer.buff_bytes;
-	if (size_padd >= MD5_BUFFER_CNTX || size_padd != 8)
+	sha256_update(cntx, padd, find_padding_nb(cntx->len));
+	size_padd = 64 - cntx->buffer.buff_bytes;
+	if (size_padd >= 64 || size_padd != 8)
 		log_fatal("%lu != 8, func: %s:%u", size_padd, __FUNCTION__, __LINE__);
-	md5_update(cntx, (unsigned char *)&len_tmp, 8);
+	sha256_update(cntx, (unsigned char *)&len_tmp, 8);
 }
 
-void			md5_final(t_md5_context *cntx, unsigned char data[16])
+void			sha256_final(t_sha256_context *cntx, unsigned char data[16])
 {
 	uint32_t	*data_cast;
 

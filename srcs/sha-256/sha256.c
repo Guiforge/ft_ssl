@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   md5.c                                              :+:      :+:    :+:   */
+/*  sha256.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:35:59 by gpouyat          ###   ########.fr       */
+/*   Created: 2019/01/04 16:32:19 by gpouyat           #+#    #+#             */
+/*   Updated: 2019/01/04 16:34:49 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 extern char const	*g_optarg;
 extern int			g_optind;
 
-static void	md5_exec_string(t_md5_flags flags, t_list *lst)
+static void	sha256_exec_string(t_sha256_flags flags, t_list *lst)
 {
 	unsigned char sum[16];
 
@@ -24,17 +24,17 @@ static void	md5_exec_string(t_md5_flags flags, t_list *lst)
 	{
 		if (!lst->content)
 		{
-			log_error("Md5: No string in %s:%d", __FUNCTION__, __LINE__);
-			ft_dprintf(STDERR_FILENO, "Md5: No string in option s");
+			log_error("sha256: No string in %s:%d", __FUNCTION__, __LINE__);
+			ft_dprintf(STDERR_FILENO, "sha256: No string in option s");
 			return ;
 		}
-		md5_get_sum_string(lst->content, sum);
-		md5_print_string(flags, sum, lst->content);
+		sha256_get_sum_string(lst->content, sum);
+		sha256_print_string(flags, sum, lst->content);
 		lst = lst->next;
 	}
 }
 
-static void	md5_exec_files(t_md5_flags flags, const char **av)
+static void	sha256_exec_files(t_sha256_flags flags, const char **av)
 {
 	unsigned char	sum[16];
 
@@ -42,13 +42,13 @@ static void	md5_exec_files(t_md5_flags flags, const char **av)
 	while (av && *av)
 	{
 		log_debug("file: %s", *av);
-		if (md5_get_sum_file(*av, sum) != -1)
-			md5_print(flags, sum, *av);
+		if (sha256_get_sum_file(*av, sum) != -1)
+			sha256_print(flags, sum, *av);
 		av++;
 	}
 }
 
-int			parse_options(t_md5_flags *flags, int ac, char const *av[],
+int			parse_options(t_sha256_flags *flags, int ac, char const *av[],
 															t_list **lst_str)
 {
 	int		opt;
@@ -72,30 +72,30 @@ int			parse_options(t_md5_flags *flags, int ac, char const *av[],
 
 static void	help_usage(void)
 {
-	ft_putendl("usage: md5 [-pqrh] [-s [ARG]] [file ...]");
+	ft_putendl("usage: sha256 [-pqrh] [-s [ARG]] [file ...]");
 }
 
-void		md5(int ac, const char **av)
+void		sha256(int ac, const char **av)
 {
-	t_md5_flags		flags;
+	t_sha256_flags		flags;
 	t_list			*lst_str;
 	unsigned char	sum[16];
 
 	lst_str = NULL;
 	if (sizeof(size_t) != 8)
 	{
-		log_fatal("%s, sizeof(size_t): %lu", SSL_ERROR_SIZE_64, sizeof(size_t));
+		log_fatal("%s, sizeof(size_t): %lu",  8, sizeof(size_t));
 		return ((void)over(SSL_ERROR_SIZE_64, 0));
 	}
 	if (parse_options(&flags, ac, av, &lst_str))
 		return (help_usage());
 	if (flags.p || (!lst_str && g_optind == ac))
 	{
-		md5_get_sum_out(sum, flags.p && !flags.q);
-		md5_put_sum(sum);
+		sha256_get_sum_out(sum, flags.p && !flags.q);
+		sha256_put_sum(sum);
 		ft_putchar('\n');
 	}
-	md5_exec_string(flags, lst_str);
-	md5_exec_files(flags, &av[g_optind]);
+	sha256_exec_string(flags, lst_str);
+	sha256_exec_files(flags, &av[g_optind]);
 	ft_secu_free_lvl(M_LVL_FUNCT);
 }
