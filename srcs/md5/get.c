@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get.c                                         :+:      :+:    :+:   */
+/*   get.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 22:23:02 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/03 13:41:35 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 15:50:15 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ ssize_t		md5_get_sum_file(const char *filename, unsigned char data[16])
 		return (fd);
 	}
 	md5_init(&cntx_file);
-	while((size = read(fd, buff, 64)) && size != -1)
+	while ((size = read(fd, buff, 64)) && size != -1)
 		md5_update(&cntx_file, buff, size);
 	close(fd);
 	md5_final(&cntx_file, data);
 	return (size);
 }
 
-ssize_t		md5_get_sum_out(unsigned char data[16], t_bool	print)
+ssize_t		md5_get_sum_out(unsigned char data[16], t_bool print)
 {
 	t_md5_context	cntx_file;
 	ssize_t			size;
@@ -54,7 +54,7 @@ ssize_t		md5_get_sum_out(unsigned char data[16], t_bool	print)
 	ft_bzero(buff, 64);
 	log_info("md5 start get from stdout, print:%d", print);
 	md5_init(&cntx_file);
-	while((size = read(STDIN_FILENO, buff, 64)) && size != -1)
+	while ((size = read(STDIN_FILENO, buff, 64)) && size != -1)
 	{
 		if (print)
 			write(STDOUT_FILENO, buff, size);

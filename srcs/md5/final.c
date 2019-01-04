@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2018/12/30 23:10:48 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 15:49:44 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static size_t	find_padding_nb(size_t len)
 	len *= 8;
 	start = len;
 	log_debug("start: %lu", start);
-	while(++len % 512 != 448)
+	while (++len % 512 != 448)
 	{
 		if (len == ULLONG_MAX)
 			return (over_p("md5:", MD5_ERROR_PADDING, 0));
@@ -31,15 +31,15 @@ static size_t	find_padding_nb(size_t len)
 		return (over_p("md5:", MD5_ERROR_PADDING, 0));
 	}
 	log_func_end(__FUNCTION__);
-	return ((len - start)/8);
+	return ((len - start) / 8);
 }
 
 static	void	padding(t_md5_context *cntx)
 {
-	size_t		size_padd;
+	size_t			size_padd;
 	unsigned char	padd[64];
 	unsigned char	super_padd;
-	size_t		len_tmp;
+	size_t			len_tmp;
 
 	super_padd = 0x80;
 	ft_bzero(padd, sizeof(padd));
@@ -52,7 +52,7 @@ static	void	padding(t_md5_context *cntx)
 	md5_update(cntx, (unsigned char *)&len_tmp, 8);
 }
 
-void			md5_final(t_md5_context *cntx, unsigned char	data[16])
+void			md5_final(t_md5_context *cntx, unsigned char data[16])
 {
 	uint32_t	*data_cast;
 

@@ -6,27 +6,27 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 15:00:13 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/04 15:59:09 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
 extern char const	*g_optarg;
-extern int			g_optind; //&av[g_optind]
+extern int			g_optind;
 
 static void	md5_exec_string(t_md5_flags flags, t_list *lst)
 {
 	unsigned char sum[16];
 
 	log_info("Start exec strings");
-	while(lst)
+	while (lst)
 	{
 		if (!lst->content)
 		{
 			log_error("Md5: No string in %s:%d", __FUNCTION__, __LINE__);
 			ft_dprintf(STDERR_FILENO, "Md5: No string in option s");
-			return;
+			return ;
 		}
 		md5_get_sum_string(lst->content, sum);
 		md5_print_string(flags, sum, lst->content);
@@ -34,12 +34,12 @@ static void	md5_exec_string(t_md5_flags flags, t_list *lst)
 	}
 }
 
-static void md5_exec_files(t_md5_flags flags, const char **av)
+static void	md5_exec_files(t_md5_flags flags, const char **av)
 {
 	unsigned char	sum[16];
 
 	log_info("Start exec files");
-	while(av && *av)
+	while (av && *av)
 	{
 		log_debug("file: %s", *av);
 		if (md5_get_sum_file(*av, sum) != -1)
@@ -48,7 +48,8 @@ static void md5_exec_files(t_md5_flags flags, const char **av)
 	}
 }
 
-int		parse_options(t_md5_flags *flags, int ac, char const *av[], t_list **lst_str)
+int			parse_options(t_md5_flags *flags, int ac, char const *av[],
+															t_list **lst_str)
 {
 	int		opt;
 
@@ -84,10 +85,10 @@ void		md5(int ac, const char **av)
 	if (sizeof(size_t) != 8)
 	{
 		log_fatal("%s, sizeof(size_t): %lu", MD5_ERROR_SIZE_64, sizeof(size_t));
-		return((void)over(MD5_ERROR_SIZE_64, 0));
+		return ((void)over(MD5_ERROR_SIZE_64, 0));
 	}
 	if (parse_options(&flags, ac, av, &lst_str))
-		return(help_usage());
+		return (help_usage());
 	if (flags.p || (!lst_str && g_optind == ac))
 	{
 		md5_get_sum_out(sum, flags.p && !flags.q);
