@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:35:59 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/07 18:39:59 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	md5_exec_files(t_md5_flags flags, const char **av)
 	}
 }
 
-int			parse_options(t_md5_flags *flags, int ac, char const *av[],
+static int			parse_options(t_md5_flags *flags, int ac, char const *av[],
 															t_list **lst_str)
 {
 	int		opt;

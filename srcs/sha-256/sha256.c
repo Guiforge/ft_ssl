@@ -48,7 +48,7 @@ static void	sha256_exec_files(t_sha256_flags flags, const char **av)
 	}
 }
 
-int			parse_options(t_sha256_flags *flags, int ac, char const *av[],
+static int			parse_options(t_sha256_flags *flags, int ac, char const *av[],
 															t_list **lst_str)
 {
 	int		opt;

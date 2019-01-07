@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 15:47:23 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/07 18:40:27 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,8 @@ int		main(int ac, const char **av)
 		log_init(".log", 2);
 	if (ac <= 1)
 		ft_putendl(HELP_USAGE);
-	md5(--ac, ++av);
+	if (ft_strequ("md5", av[1]))
+		md5(--ac, ++av);
+	else if (ft_strequ("sha256", av[1]))
+		sha256(--ac, ++av);
 }

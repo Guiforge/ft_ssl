@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:54:23 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/07 18:40:22 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct			s_sha256_context {
 }						t_sha256_context;
 
 void					sha256_init(t_sha256_context *cntx);
-
+void					sha256(int ac, const char **av);
 
 /*
 **	MD5

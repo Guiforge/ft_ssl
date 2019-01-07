@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:54:30 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/07 19:12:16 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ static unsigned int	g_k[64] = { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,\
 static void			sha256_operations_init_val(t_sha256_context *cntx,
 												t_sha256_operations_value *val)
 {
+	unsigned char	i;
+	uint32_t		s0;
+	uint32_t		s1;
+	uint32_t		*d;
+
+	i = 15;
 	val->a = cntx->h0;
 	val->b = cntx->h1;
 	val->c = cntx->h2;
@@ -37,54 +43,47 @@ static void			sha256_operations_init_val(t_sha256_context *cntx,
 	val->f = cntx->h5;
 	val->g = cntx->h6;
 	val->h = cntx->h7;
-	val->data = (uint32_t *)cntx->buffer.buff;
+	d = (uint32_t *)cntx->buffer.buff;	
+	while (++i < 64)
+	{
+		s0 = (right_rot32(d[i - 15], 7)) ^ (right_rot32(d[i - 15], 18)) ^ (right_rot32(d[i - 15], 3));
+		s1 = (right_rot32(d[i - 2], 17)) ^ (right_rot32(d[i - 2], 19)) ^ (right_rot32(d[i - 2], 10));
+		d[i] = d[i - 16] + s0 + d[ i - 7] + s1;
+	}
+	val->data = d;
 }
 
-static void			sha256_operations_end_loop(t_sha256_operaions_value *val,
-									uint32_t f, unsigned char i, uint32_t g)
+static void sha256_operations_loop(t_sha256_operations_value *val, unsigned char i)
 {
-	uint32_t		tmp;
+	uint32_t		s0;
+	uint32_t		s1;
+	uint32_t		ch;
+	uint32_t		tmp[2];
+	uint32_t		maj;
 
-	tmp = val->d;
+	s1 = right_rot32(val->e, 6) ^ right_rot32(val->e, 11) ^ right_rot32(val->e, 25);
+	ch = (val->e & val->f) ^ ((~ val->e) & val->g);
+	tmp[0] = val->h + s1 + ch + g_k[i] + val->data[i];
+	s0 = right_rot32(val->a, 2) ^ right_rot32(val->a, 13) ^ right_rot32(val->a, 22);
+	maj = (val->a & val->b) ^ (val->a & val->c) ^ (val->b & val->c);
+	tmp[1] = s0 + maj;
+
+	val->h = val->g;
+	val->g = val->f;
+	val->f = val->e;
+	val->e = val->d + tmp[0];
 	val->d = val->c;
 	val->c = val->b;
-	val->b = left_rot32((val->a + f + g_k[i] + val->data[g]), g_r[i]) + val->b;
-	val->a = tmp;
+	val->b = val->a;
+	val->a = tmp[0] + tmp[1];
 }
 
-static void			sha256_operations_loop(t_sha256_operaions_value *val,
-															unsigned char i)
-{
-	uint32_t	f;
-	uint32_t	g;
 
-	if (0 <= i && i <= 15)
-	{
-		f = (val->b & val->c) | ((~val->b) & val->d);
-		g = i;
-	}
-	else if (16 <= i && i <= 31)
-	{
-		f = (val->d & val->b) | ((~val->d) & val->c);
-		g = (5 * i + 1) % 16;
-	}
-	else if (32 <= i && i <= 47)
-	{
-		f = val->b ^ val->c ^ val->d;
-		g = (3 * i + 5) % 16;
-	}
-	else
-	{
-		f = val->c ^ (val->b | (~val->d));
-		g = (7 * i) % 16;
-	}
-	sha256_operations_end_loop(val, f, i, g);
-}
 
 void				sha256_operations(t_sha256_context *cntx)
 {
-	t_sha256_operaions_value	val;
-	unsigned char			i;
+	t_sha256_operations_value	val;
+	unsigned char				i;
 
 	i = 0;
 	sha256_operations_init_val(cntx, &val);
@@ -97,4 +96,8 @@ void				sha256_operations(t_sha256_context *cntx)
 	cntx->h1 = cntx->h1 + val.b;
 	cntx->h2 = cntx->h2 + val.c;
 	cntx->h3 = cntx->h3 + val.d;
+	cntx->h4 = cntx->h4 + val.e;
+	cntx->h5 = cntx->h5 + val.f;
+	cntx->h6 = cntx->h6 + val.g;
+	cntx->h7 = cntx->h7 + val.h;
 }
