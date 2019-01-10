@@ -17,7 +17,7 @@ extern int			g_optind;
 
 static void	sha256_exec_string(t_sha256_flags flags, t_list *lst)
 {
-	unsigned char sum[16];
+	unsigned char sum[32];
 
 	log_info("Start exec strings");
 	while (lst)
@@ -36,7 +36,7 @@ static void	sha256_exec_string(t_sha256_flags flags, t_list *lst)
 
 static void	sha256_exec_files(t_sha256_flags flags, const char **av)
 {
-	unsigned char	sum[16];
+	unsigned char	sum[32];
 
 	log_info("Start exec files");
 	while (av && *av)
@@ -79,7 +79,7 @@ void		sha256(int ac, const char **av)
 {
 	t_sha256_flags		flags;
 	t_list			*lst_str;
-	unsigned char	sum[16];
+	unsigned char	sum[32];
 
 	lst_str = NULL;
 	if (sizeof(size_t) != 8)

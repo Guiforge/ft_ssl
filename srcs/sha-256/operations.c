@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/07 19:12:16 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/08 17:03:25 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void			sha256_operations_init_val(t_sha256_context *cntx,
 	unsigned char	i;
 	uint32_t		s0;
 	uint32_t		s1;
-	uint32_t		*d;
 
 	i = 15;
 	val->a = cntx->h0;
@@ -43,14 +42,20 @@ static void			sha256_operations_init_val(t_sha256_context *cntx,
 	val->f = cntx->h5;
 	val->g = cntx->h6;
 	val->h = cntx->h7;
-	d = (uint32_t *)cntx->buffer.buff;	
+
+	ft_memcpy((char *)val->data, (char *)cntx->buffer.buff, 64);
 	while (++i < 64)
 	{
-		s0 = (right_rot32(d[i - 15], 7)) ^ (right_rot32(d[i - 15], 18)) ^ (right_rot32(d[i - 15], 3));
-		s1 = (right_rot32(d[i - 2], 17)) ^ (right_rot32(d[i - 2], 19)) ^ (right_rot32(d[i - 2], 10));
-		d[i] = d[i - 16] + s0 + d[ i - 7] + s1;
+		s0 = (right_rot32(val->data[i - 15], 7)) ^ (right_rot32(val->data[i - 15], 18)) ^ (right_rot32(val->data[i - 15], 3));
+		s1 = (right_rot32(val->data[i - 2], 17)) ^ (right_rot32(val->data[i - 2], 19)) ^ (right_rot32(val->data[i - 2], 10));
+		val->data[i] = val->data[i - 16] + s0 + val->data[i - 7] + s1;
 	}
-	val->data = d;
+	// i = 0;
+	// while (i < 64)
+	// {
+	// 	log_debug("[%d]: %02x", i, val->data[i]);
+	// 	i++;
+	// }
 }
 
 static void sha256_operations_loop(t_sha256_operations_value *val, unsigned char i)
@@ -77,7 +82,6 @@ static void sha256_operations_loop(t_sha256_operations_value *val, unsigned char
 	val->b = val->a;
 	val->a = tmp[0] + tmp[1];
 }
-
 
 
 void				sha256_operations(t_sha256_context *cntx)

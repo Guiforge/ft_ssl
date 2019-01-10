@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:38:27 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/08 11:46:47 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,15 @@ static	void	padding(t_md5_context *cntx)
 	md5_update(cntx, (unsigned char *)&len_tmp, 8);
 }
 
-void			md5_final(t_md5_context *cntx, unsigned char data[16])
+void			md5_final(t_md5_context *cntx, unsigned char sum[16])
 {
-	uint32_t	*data_cast;
+	uint32_t	*sum_cast;
 
 	padding(cntx);
 	log_debug("final: %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3);
-	data_cast = (uint32_t *)data;
-	data_cast[0] = cntx->h0;
-	data_cast[1] = cntx->h1;
-	data_cast[2] = cntx->h2;
-	data_cast[3] = cntx->h3;
+	sum_cast = (uint32_t *)sum;
+	sum_cast[0] = cntx->h0;
+	sum_cast[1] = cntx->h1;
+	sum_cast[2] = cntx->h2;
+	sum_cast[3] = cntx->h3;
 }

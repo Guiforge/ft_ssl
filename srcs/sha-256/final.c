@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:39:42 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/08 11:43:17 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ static	void	padding(t_sha256_context *cntx)
 	size_t			size_padd;
 	unsigned char	padd[64];
 	unsigned char	super_padd;
-	size_t			len_tmp;
+	uint64_t		len_tmp;
 
 	super_padd = 0x80;
 	ft_bzero(padd, sizeof(padd));
 	ft_memcpy(padd, &super_padd, 1);
-	len_tmp = cntx->len * 8;
+	len_tmp = ft_swap_int64(cntx->len * 8);
 	sha256_update(cntx, padd, find_padding_nb(cntx->len));
 	size_padd = 64 - cntx->buffer.buff_bytes;
 	if (size_padd >= 64 || size_padd != 8)
@@ -52,15 +52,19 @@ static	void	padding(t_sha256_context *cntx)
 	sha256_update(cntx, (unsigned char *)&len_tmp, 8);
 }
 
-void			sha256_final(t_sha256_context *cntx, unsigned char data[16])
+void			sha256_final(t_sha256_context *cntx, unsigned char data[64])
 {
 	uint32_t	*data_cast;
 
 	padding(cntx);
-	log_debug("final: %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3);
+	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
 	data_cast = (uint32_t *)data;
 	data_cast[0] = cntx->h0;
 	data_cast[1] = cntx->h1;
 	data_cast[2] = cntx->h2;
 	data_cast[3] = cntx->h3;
+	data_cast[4] = cntx->h4;
+	data_cast[5] = cntx->h5;
+	data_cast[6] = cntx->h6;
+	data_cast[7] = cntx->h7;
 }

@@ -6,24 +6,24 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 22:23:02 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 15:50:15 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/08 11:46:02 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 #include <fcntl.h>
 
-void		md5_get_sum_string(const char *s, unsigned char data[16])
+void		md5_get_sum_string(const char *s, unsigned char sum[16])
 {
 	t_md5_context	cntx_str;
 
 	log_info("md5 start get from string, print:%d", print);
 	md5_init(&cntx_str);
 	md5_update(&cntx_str, (unsigned char *)s, ft_strlen(s));
-	md5_final(&cntx_str, data);
+	md5_final(&cntx_str, sum);
 }
 
-ssize_t		md5_get_sum_file(const char *filename, unsigned char data[16])
+ssize_t		md5_get_sum_file(const char *filename, unsigned char sum[16])
 {
 	t_md5_context	cntx_file;
 	int				fd;
@@ -41,11 +41,11 @@ ssize_t		md5_get_sum_file(const char *filename, unsigned char data[16])
 	while ((size = read(fd, buff, 64)) && size != -1)
 		md5_update(&cntx_file, buff, size);
 	close(fd);
-	md5_final(&cntx_file, data);
+	md5_final(&cntx_file, sum);
 	return (size);
 }
 
-ssize_t		md5_get_sum_out(unsigned char data[16], t_bool print)
+ssize_t		md5_get_sum_out(unsigned char sum[16], t_bool print)
 {
 	t_md5_context	cntx_file;
 	ssize_t			size;
@@ -60,6 +60,6 @@ ssize_t		md5_get_sum_out(unsigned char data[16], t_bool print)
 			write(STDOUT_FILENO, buff, size);
 		md5_update(&cntx_file, (unsigned char *)buff, size);
 	}
-	md5_final(&cntx_file, data);
+	md5_final(&cntx_file, sum);
 	return (size);
 }

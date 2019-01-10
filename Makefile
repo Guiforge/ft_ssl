@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2019/01/07 18:52:21 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/08 11:09:02 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,17 +21,15 @@ C_B = \033[1;34m
 C_C = \033[1;36m
 C_R = \033[1;31m
 
-SRC_SUBDIR 		= ssl
-SRCS			+= main.c
+SRCS			+= /ssl/main.c
 
-SRC_SUBDIR 		+= md5
-SRCS			+= final.c get.c init.c md5.c operations.c print_sum.c update.c
+SRCS			+= /md5/final.c /md5/get.c /md5/init.c /md5/md5.c /md5/operations.c /md5/print_sum.c /md5/update.c
 
-SRC_SUBDIR 		+= sha-256
-SRCS			+= final.c get.c init.c sha256.c operations.c print_sum.c update.c
+SRCS			+= /sha-256/final.c /sha-256/get.c /sha-256/init.c /sha-256/sha256.c /sha-256/operations.c /sha-256/print_sum.c /sha-256/update.c
 
-SRC_SUBDIR		+= misc
-SRCS			+= buffer512.c
+SRCS			+= /misc/buffer512.c
+
+SRC_SUBDIR = ssl misc md5 sha-256
 
 ###############################################################################
 
@@ -57,16 +55,21 @@ endif
 INC			= -I includes
 SRCS_DIR		= srcs
 
-vpath  %c $(addprefix $(SRCS_DIR)/, $(SRC_SUBDIR))
-
 #Objects
-OBJS_DIR		= objs
- OBJS			= $(SRCS:%.c=$(OBJS_DIR)/%.o)
+# OBJS = $(addprefix $(OBJS_DIR)/,$(OBJ_NAME))
+# OBJS_DIR		= objs
+# OBJ = $(SRCS_NAME:.c=.o)# $(SRCS:%.c=$(OBJS_DIR)/%.o)
 
-BUILD_DIR		= $(OBJS_DIR)
+OBJ_NAME = $(SRCS:.c=.o)
+OBJS_DIR	= objs
+OBJS = $(addprefix $(OBJS_DIR),$(OBJ_NAME))
+OBJS_DIRS = $(addprefix $(OBJS_DIR)/,$(SRC_SUBDIR))
+
+
+BUILD_DIR		= $(OBJS_DIRS)
 
 #Utils
-RM			= rm -rf
+RM				= rm -rf
 MKDIR			= mkdir -p
 
 #LIB
@@ -90,14 +93,13 @@ $(NAME): $(LIB) $(OBJS)
 	@echo "[\033[36m------- Compilation Done! -------\033[0m]"
 	@echo "[\033[35m---------------------------------\033[0m]"
 
-$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+	$(MKDIR) $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 	$(eval COUNT=$(shell echo $$(($(COUNT)+1))))
 	$(eval PERCENT=$(shell echo $$((($(COUNT) * 100 )/$(TOTAL)))))
 	@printf "$(C_B)%-8s $(C_NO)" "[$(PERCENT)%]"
 
-$(BUILD_DIR):
-	@$(MKDIR) $@
 
 $(LIB):
 	make DEBUG=$(DEBUG) DEV=$(DEV) SAN=$(SAN) -C $(LIB_PATH)
