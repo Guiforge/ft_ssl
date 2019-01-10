@@ -15,7 +15,7 @@
 int		main(int ac, const char **av)
 {
 	if (INTERN_DEBUG_FT_SSL)
-		log_init(NULL, 2);
+		log_init("./log", 2);
 	if (ac <= 1)
 		ft_putendl(HELP_USAGE);
 	if (ft_strequ("md5", av[1]))

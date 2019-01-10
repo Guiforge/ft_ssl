@@ -25,7 +25,8 @@ SRCS			+= /ssl/main.c
 
 SRCS			+= /md5/final.c /md5/get.c /md5/init.c /md5/md5.c /md5/operations.c /md5/print_sum.c /md5/update.c
 
-SRCS			+= /sha-256/final.c /sha-256/get.c /sha-256/init.c /sha-256/sha256.c /sha-256/operations.c /sha-256/print_sum.c /sha-256/update.c
+SRCS			+= /sha-256/final.c /sha-256/get.c /sha-256/init.c /sha-256/sha256.c /sha-256/operations.c /sha-256/print_sum.c /sha-256/update.c \
+							/sha-256/globals_functions_sha.c /sha-256/globals_functions_sha2.c
 
 SRCS			+= /misc/buffer512.c
 

@@ -62,7 +62,7 @@ static void			md5_operations_loop(t_md5_operations_value *val,
 	uint32_t	f;
 	uint32_t	g;
 
-	if (0 <= i && i <= 15)
+	if (0 == i && i <= 15)
 	{
 		f = (val->b & val->c) | ((~val->b) & val->d);
 		g = i;

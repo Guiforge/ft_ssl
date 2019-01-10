@@ -40,11 +40,13 @@ t_bool					buffer512_is_full(t_buffer512 *buffer512);
 void					buffer512_fill(t_buffer512 *buffer512,
 							unsigned char *data, size_t size, size_t *index);
 
-uint32_t				md5_ssig1(uint32_t x);
-uint32_t				md5_bsig1(uint32_t x);
-uint32_t				bsig0(uint32_t x);
+uint32_t				sha256_ssig0(uint32_t x);
+uint32_t				sha256_ssig1(uint32_t x);
+uint32_t				sha256_bsig1(uint32_t x);
+uint32_t				sha256_bsig0(uint32_t x);
 uint32_t				sha256_ch(uint32_t x, uint32_t y, uint32_t z);
 uint32_t				sha256_maj(uint32_t x, uint32_t y, uint32_t z);
+
 
 /*
 ** SHA-256

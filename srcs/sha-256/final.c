@@ -59,12 +59,12 @@ void			sha256_final(t_sha256_context *cntx, unsigned char data[64])
 	padding(cntx);
 	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
 	data_cast = (uint32_t *)data;
-	data_cast[0] = cntx->h0;
-	data_cast[1] = cntx->h1;
-	data_cast[2] = cntx->h2;
-	data_cast[3] = cntx->h3;
-	data_cast[4] = cntx->h4;
-	data_cast[5] = cntx->h5;
-	data_cast[6] = cntx->h6;
-	data_cast[7] = cntx->h7;
+	data_cast[0] = ft_swap_int32(cntx->h0);
+	data_cast[1] = ft_swap_int32(cntx->h1);
+	data_cast[2] = ft_swap_int32(cntx->h2);
+	data_cast[3] = ft_swap_int32(cntx->h3);
+	data_cast[4] = ft_swap_int32(cntx->h4);
+	data_cast[5] = ft_swap_int32(cntx->h5);
+	data_cast[6] = ft_swap_int32(cntx->h6);
+	data_cast[7] = ft_swap_int32(cntx->h7);
 }

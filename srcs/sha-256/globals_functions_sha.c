@@ -22,22 +22,12 @@ uint32_t	sha256_maj(uint32_t x, uint32_t y, uint32_t z)
 	return ((x & y) ^ (x & z) ^ (y & z));
 }
 
-uint32_t	bsig0(uint32_t x)
+uint32_t	sha256_bsig0(uint32_t x)
 {
 	return ((right_rot32(x, 2) ^ right_rot32(x, 13) ^ right_rot32(x, 22)));
 }
 
-uint32_t	md5_bsig1(uint32_t x)
+uint32_t	sha256_bsig1(uint32_t x)
 {
 	return (right_rot32(x, 6) ^ right_rot32(x, 11) ^ right_rot32(x, 25));
-}
-
-uint32_t	md5_ssig0(uint32_t x)
-{
-	return (right_rot32(x, 7) ^ right_rot32(x, 18) ^ (x >> 3));
-}
-
-uint32_t	md5_ssig1(uint32_t x)
-{
-	return (right_rot32(x, 17) ^ right_rot32(x, 19) ^ (x >> 10));
 }
