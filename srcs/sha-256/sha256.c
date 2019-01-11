@@ -70,12 +70,13 @@ static int			parse_options(t_sha256_flags *flags, int ac, char const *av[],
 	return (0);
 }
 
-static void	help_usage(void)
+static int	help_usage(void)
 {
 	ft_putendl("usage: sha256 [-pqrh] [-s [ARG]] [file ...]");
+	return (EXIT_FAILURE);
 }
 
-void		sha256(int ac, const char **av)
+int			sha256(int ac, const char **av)
 {
 	t_sha256_flags		flags;
 	t_list			*lst_str;
@@ -85,7 +86,7 @@ void		sha256(int ac, const char **av)
 	if (sizeof(size_t) != 8)
 	{
 		log_fatal("%s, sizeof(size_t): %lu",  8, sizeof(size_t));
-		return ((void)over(SSL_ERROR_SIZE_64, 0));
+		return (over(SSL_ERROR_SIZE_64, EXIT_FAILURE));
 	}
 	if (parse_options(&flags, ac, av, &lst_str))
 		return (help_usage());
@@ -98,4 +99,5 @@ void		sha256(int ac, const char **av)
 	sha256_exec_string(flags, lst_str);
 	sha256_exec_files(flags, &av[g_optind]);
 	ft_secu_free_lvl(M_LVL_FUNCT);
+	return (EXIT_SUCCESS);
 }

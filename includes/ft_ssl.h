@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/11 19:13:50 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/11 19:41:57 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 # define SSL_SIZE_BUFF_READ 4096
 
 
+typedef struct			s_ssl_hash {
+	char		*buff;
+	int			(*f)(int, const char **);
+}						t_ssl_hash;
+
 /*
 ** MISC
 */
@@ -41,12 +46,7 @@ t_bool					buffer512_is_full(t_buffer512 *buffer512);
 void					buffer512_fill(t_buffer512 *buffer512,
 							unsigned char *data, size_t size, size_t *index);
 
-uint32_t				sha256_ssig0(uint32_t x);
-uint32_t				sha256_ssig1(uint32_t x);
-uint32_t				sha256_bsig1(uint32_t x);
-uint32_t				sha256_bsig0(uint32_t x);
-uint32_t				sha256_ch(uint32_t x, uint32_t y, uint32_t z);
-uint32_t				sha256_maj(uint32_t x, uint32_t y, uint32_t z);
+
 
 
 /*
@@ -84,8 +84,15 @@ typedef struct			s_sha256_context {
 	size_t				len;
 }						t_sha256_context;
 
+uint32_t				sha256_ssig0(uint32_t x);
+uint32_t				sha256_ssig1(uint32_t x);
+uint32_t				sha256_bsig1(uint32_t x);
+uint32_t				sha256_bsig0(uint32_t x);
+uint32_t				sha256_ch(uint32_t x, uint32_t y, uint32_t z);
+uint32_t				sha256_maj(uint32_t x, uint32_t y, uint32_t z);
+
 void					sha256_init(t_sha256_context *cntx);
-void					sha256(int ac, const char **av);
+int						sha256(int ac, const char **av);
 void					sha256_operations(t_sha256_context *cntx);
 void					sha256_put_sum(unsigned char sum[32]);
 void					sha256_print(t_sha256_flags flags,
@@ -146,7 +153,7 @@ ssize_t					md5_get_sum_file(const char *filename,
 														unsigned char sum[16]);
 ssize_t					md5_get_sum_out(unsigned char sum[16], t_bool	print);
 
-void					md5(int ac, const char **av);
+int						md5(int ac, const char **av);
 void					md5_init(t_md5_context *cntx);
 void					md5_operations(t_md5_context *cntx);
 void					md5_update(t_md5_context *cntx, unsigned char *data,

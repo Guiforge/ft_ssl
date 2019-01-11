@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:56:55 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/07 18:39:59 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/11 19:52:17 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ static int			parse_options(t_md5_flags *flags, int ac, char const *av[],
 	return (0);
 }
 
-static void	help_usage(void)
+static int	help_usage(void)
 {
 	ft_putendl("usage: md5 [-pqrh] [-s [ARG]] [file ...]");
+	return(EXIT_FAILURE);
 }
 
-void		md5(int ac, const char **av)
+int			md5(int ac, const char **av)
 {
 	t_md5_flags		flags;
 	t_list			*lst_str;
@@ -85,7 +86,7 @@ void		md5(int ac, const char **av)
 	if (sizeof(size_t) != 8)
 	{
 		log_fatal("%s, sizeof(size_t): %lu", SSL_ERROR_SIZE_64, sizeof(size_t));
-		return ((void)over(SSL_ERROR_SIZE_64, 0));
+		return (over(SSL_ERROR_SIZE_64, EXIT_FAILURE));
 	}
 	if (parse_options(&flags, ac, av, &lst_str))
 		return (help_usage());
@@ -98,4 +99,5 @@ void		md5(int ac, const char **av)
 	md5_exec_string(flags, lst_str);
 	md5_exec_files(flags, &av[g_optind]);
 	ft_secu_free_lvl(M_LVL_FUNCT);
+	return (EXIT_SUCCESS);
 }
