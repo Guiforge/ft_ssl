@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 21:58:46 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/11 19:13:50 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define HELP_USAGE "usage: ft_ssl command [command opts] [command args]"
 # define SSL_ERROR_SIZE_64 "Error size_t is not unsigned long"
 # define SSL_ERROR_PADDING "Error step Completion cannot find padding"
+# define SSL_SIZE_BUFF_READ 4096
 
 
 /*

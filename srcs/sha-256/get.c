@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 22:23:02 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 13:56:56 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/11 19:24:09 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ ssize_t		sha256_get_sum_file(const char *filename, unsigned char sum[32])
 	t_sha256_context	cntx_file;
 	int				fd;
 	ssize_t			size;
-	unsigned char	buff[64];
+	unsigned char	buff[SSL_SIZE_BUFF_READ];
 
-	ft_bzero(buff, 64);
+	ft_bzero(buff, SSL_SIZE_BUFF_READ);
 	log_info("sha256 start get from file %s", filename);
 	if ((fd = open(filename, O_RDONLY)) == -1)
 	{
@@ -40,7 +40,7 @@ ssize_t		sha256_get_sum_file(const char *filename, unsigned char sum[32])
 		return (fd);
 	}
 	sha256_init(&cntx_file);
-	while ((size = read(fd, buff, 64)) && size != -1)
+	while ((size = read(fd, buff, SSL_SIZE_BUFF_READ)) && size != -1)
 		sha256_update(&cntx_file, buff, size);
 	close(fd);
 	sha256_final(&cntx_file, sum);
