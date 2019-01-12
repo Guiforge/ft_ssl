@@ -1,6 +1,8 @@
 #!/bin/bash
 
 BIN="../ft_ssl"
+GOOD=0
+FAIL=0
 
 X_exec()
 {
@@ -14,8 +16,10 @@ ft_test()
     X_exec "$2"
     if [ "$3" = "$shared_ret" ]
     then
+		GOOD=`expr $GOOD + 1`
         echo -e "\033[1;32m" "YES" "\033[0m"
     else
+		FAIL=`expr $FAIL + 1`
         echo -e "\033[1;31m" "NO:\n" "-- expected:\n'$3'\n -- me:\n'$shared_ret'"  "\033[0m"
     fi
 
@@ -49,6 +53,42 @@ acbd18db4cc2f85cedef654fccc4a4d8 "foo"
     ft_test 'MD5' 'echo "just to be extra clear" | '$BIN' md5 -r -q -p -s "foo" file' '3ba35f1ea0d170cb3b9a752e3360286c
 acbd18db4cc2f85cedef654fccc4a4d8
 53d53ea94217b259c11a5a2d104ec58a'
-
 }
-tests_md5
+
+tests_sha256()
+{
+    ft_test 'SHA256 simple test' 'echo "pickle rick" | '$BIN' sha256' $(echo 'pickle rick' | shasum -a 256 | cut -d ' ' -f 1)
+    ft_test 'SHA256' 'echo "Do not pity the dead, Harry." | '$BIN' sha256 -p' "Do not pity the dead, Harry.
+$(echo 'Do not pity the dead, Harry.' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' 'echo "Pity the living." | '$BIN' sha256 -q -r' "$(echo 'Pity the living.' | shasum -a 256 | cut -d ' ' -f 1)"
+    X_exec 'echo "And above all," > file'
+    ft_test 'SHA256' ''$BIN' sha256 file' "SHA256 (file) = $(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' ''$BIN' sha256 -r file' "$(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1) file"
+    ft_test 'SHA256' ''$BIN' sha256 -s "pity those that arent following baerista on spotify."' "SHA256 (\"pity those that arent following baerista on spotify.\") = $(echo -n 'pity those that arent following baerista on spotify.' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' 'echo "be sure to handle edge cases carefully" | '$BIN' sha256 -p file' "be sure to handle edge cases carefully
+$(echo 'be sure to handle edge cases carefully' | shasum -a 256 | cut -d ' ' -f 1)
+SHA256 (file) = $(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' 'echo "some of this will not make sense at first" | '$BIN' sha256 file' "SHA256 (file) = $(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' 'echo "but eventually you will understand" | '$BIN' sha256 -p -r file' "but eventually you will understand
+$(echo 'but eventually you will understand' | shasum -a 256 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1) file"
+    ft_test 'SHA256' 'echo "GL HF lets go" | '$BIN' sha256 -p -s "foo" file' "GL HF lets go
+$(echo 'GL HF lets go' | shasum -a 256 | cut -d ' ' -f 1)
+SHA256 (\"foo\") = $(echo -n 'foo' | shasum -a 256 | cut -d ' ' -f 1)
+SHA256 (file) = $(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
+    ft_test 'SHA256' 'echo "one more thing" | '$BIN' sha256 -r -p -s "foo" file -s "bar"' "one more thing
+$(echo 'one more thing' | shasum -a 256 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 256 | cut -d ' ' -f 1) \"foo\"
+$(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1) file"
+    ft_test 'SHA256' 'echo "just to be extra clear" | '$BIN' sha256 -r -q -p -s "foo" file' "$(echo 'just to be extra clear' | shasum -a 256 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 256 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
+}
+
+test_main() {
+	tests_md5
+	tests_sha256
+	echo -e "" "\033[0;32m GOOD: $GOOD, \033[0;31m FAIL: $FAIL \033[0;33m, TOT:" `expr $GOOD + $FAIL` "\033[0m"
+}
+
+test_main

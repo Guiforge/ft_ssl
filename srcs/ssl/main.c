@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/11 19:50:31 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/12 16:25:12 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int		main(int ac, const char **av)
 
 	index = -1;
 	if (INTERN_DEBUG_FT_SSL)
-		log_init("./log", 2);
+		log_init(".log", 2);
 	if (ac <= 1)
 		ft_putendl(HELP_USAGE);
 	while (g_hashes[++index].buff != NULL)

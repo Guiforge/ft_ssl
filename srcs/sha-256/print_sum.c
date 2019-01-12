@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 21:46:13 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 11:41:38 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/12 14:48:43 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	sha256_print_prompt(t_sha256_flags flags, const char *s, t_bool is_s
 	if (flags.q || flags.r || !s)
 		return ;
 	if (is_string)
-		ft_printf("sha256 (\"%s\") = ", s);
+		ft_printf("SHA256 (\"%s\") = ", s);
 	else
-		ft_printf("sha256 (%s) = ", s);
+		ft_printf("SHA256 (%s) = ", s);
 }
 
 static void	sha256_print_final(t_sha256_flags flags, unsigned char sum[32],
