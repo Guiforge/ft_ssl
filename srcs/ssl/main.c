@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/12 16:25:12 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/16 13:38:54 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,17 @@ static t_ssl_hash g_hashes[] = {
 	{"sha256", &sha256},
 	{NULL, NULL},
 };
+
+static int		help_full(int ac, const char **av)
+{
+	if (ac <= 1)
+		return (1);
+	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n", av[1]);
+	ft_putendl("Message Digest commands\n"
+"md5               sha256            sha512            whirlpool\n"
+"Cipher commands");
+	return(1);
+}
 
 int		main(int ac, const char **av)
 {
@@ -32,4 +43,5 @@ int		main(int ac, const char **av)
 		{
 			return (g_hashes[index].f(--ac, &av[1]));
 		}
+	return(help_full(ac, av));
 }
