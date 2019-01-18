@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/11 19:41:57 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/18 15:43:33 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define SSL_ERROR_PADDING "Error step Completion cannot find padding"
 # define SSL_SIZE_BUFF_READ 4096
 
+# define BUFFER_512_BYTES 64
+# define BUFFER_1024_BYTES 128
 
 typedef struct			s_ssl_hash {
 	char		*buff;
@@ -35,22 +37,94 @@ typedef struct			s_ssl_hash {
 
 /*
 ** MISC
+** *****************************************************************************
 */
 typedef struct			s_buffer512 {
 	unsigned char		buff[64];
 	unsigned char		buff_bytes;
 }						t_buffer512;
 
+typedef struct			s_buffer1024 {
+	unsigned char		buff[128];
+	unsigned char		buff_bytes;
+}						t_buffer1024;
+
 void					buffer512_clean(t_buffer512 *buffer512);
 t_bool					buffer512_is_full(t_buffer512 *buffer512);
 void					buffer512_fill(t_buffer512 *buffer512,
 							unsigned char *data, size_t size, size_t *index);
 
+void					buffer1024_clean(t_buffer1024 *buffer1024);
+t_bool					buffer1024_is_full(t_buffer1024 *buffer1024);
+void					buffer1024_fill(t_buffer1024 *buffer1024,
+							unsigned char *data, size_t size, size_t *index);
 
+/*
+** SHA-512
+** *****************************************************************************
+*/
+typedef struct			s_sha512_flags {
+	t_bool				p;
+	t_bool				q;
+	t_bool				r;
+	t_bool				s;
+}						t_sha512_flags;
+
+typedef struct			s_sha512_operaions_value {
+	uint64_t			a;
+	uint64_t			b;
+	uint64_t			c;
+	uint64_t			d;
+	uint64_t			e;
+	uint64_t			f;
+	uint64_t			g;
+	uint64_t			h;
+	uint64_t			data[80];
+}						t_sha512_operations_value;
+
+typedef struct			s_sha512_context {
+	uint64_t			h0;
+	uint64_t			h1;
+	uint64_t			h2;
+	uint64_t			h3;
+	uint64_t			h4;
+	uint64_t			h5;
+	uint64_t			h6;
+	uint64_t			h7;
+	t_buffer1024		buffer;
+	size_t				len;
+}						t_sha512_context;
+
+uint64_t				sha512_ssig0(uint64_t x);
+uint64_t				sha512_ssig1(uint64_t x);
+uint64_t				sha512_bsig1(uint64_t x);
+uint64_t				sha512_bsig0(uint64_t x);
+uint64_t				sha512_ch(uint64_t x, uint64_t y, uint64_t z);
+uint64_t				sha512_maj(uint64_t x, uint64_t y, uint64_t z);
+
+void					sha512_init(t_sha512_context *cntx);
+int						sha512(int ac, const char **av);
+void					sha512_operations(t_sha512_context *cntx);
+void					sha512_put_sum(unsigned char sum[64]);
+void					sha512_print(t_sha512_flags flags,
+										unsigned char sum[64], const char *s);
+void					sha512_print_string(t_sha512_flags flags,
+										unsigned char sum[64], const char *s);
+void					sha512_update(t_sha512_context *cntx,
+											unsigned char *data, size_t size);
+ssize_t					sha512_get_sum_out(unsigned char sum[64],
+																t_bool print);
+void					sha512_get_sum_string(const char *s,
+														unsigned char sum[64]);
+ssize_t					sha512_get_sum_file(const char *filename,
+														unsigned char sum[64]);
+void					sha512_final(t_sha512_context *cntx,
+														unsigned char sum[64]);
 
 
 /*
 ** SHA-256
+** *****************************************************************************
 */
 typedef struct			s_sha256_flags {
 	t_bool				p;
@@ -113,9 +187,8 @@ void					sha256_final(t_sha256_context *cntx,
 
 /*
 **	MD5
+** *****************************************************************************
 */
-
-# define MD5_BUFFER_CNTX 64
 
 typedef struct			s_md5_flags {
 	t_bool				p;
@@ -161,6 +234,7 @@ void					md5_update(t_md5_context *cntx, unsigned char *data,
 void					md5_final(t_md5_context *cntx, unsigned char sum[16]);
 /*
 ** ***********************************************************************
+** *****************************************************************************
 */
 
 #endif

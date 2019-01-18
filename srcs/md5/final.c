@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 11:46:47 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/18 15:28:29 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ static	void	padding(t_md5_context *cntx)
 	ft_memcpy(padd, &super_padd, 1);
 	len_tmp = cntx->len * 8;
 	md5_update(cntx, padd, find_padding_nb(cntx->len));
-	size_padd = MD5_BUFFER_CNTX - cntx->buffer.buff_bytes;
-	if (size_padd >= MD5_BUFFER_CNTX || size_padd != 8)
+	size_padd = BUFFER_512_BYTES - cntx->buffer.buff_bytes;
+	if (size_padd >= BUFFER_512_BYTES || size_padd != 8)
 		log_fatal("%lu != 8, func: %s:%u", size_padd, __FUNCTION__, __LINE__);
 	md5_update(cntx, (unsigned char *)&len_tmp, 8);
 }

@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   buffer512.c                                        :+:      :+:    :+:   */
+/*   buffer1024.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 15:48:11 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 15:28:30 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/18 17:57:27 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-void		buffer512_clean(t_buffer512 *buffer512)
+void		buffer1024_clean(t_buffer1024 *buffer1024)
 {
-	buffer512->buff_bytes = 0;
-	ft_bzero(buffer512->buff, sizeof(buffer512->buff));
+	buffer1024->buff_bytes = 0;
+	ft_bzero(buffer1024->buff, sizeof(buffer1024->buff));
 }
 
-t_bool		buffer512_is_full(t_buffer512 *buffer512)
+t_bool		buffer1024_is_full(t_buffer1024 *buffer1024)
 {
-	return (buffer512->buff_bytes == BUFFER_512_BYTES);
+	log_debug("is full: %d", buffer1024->buff_bytes);
+	return (buffer1024->buff_bytes == BUFFER_1024_BYTES);
 }
 
-void		buffer512_fill(t_buffer512 *buffer512, unsigned char *data,
+void		buffer1024_fill(t_buffer1024 *buffer1024, unsigned char *data,
 													size_t size, size_t *index)
 {
 	unsigned char	size_to_fill;
@@ -33,11 +34,11 @@ void		buffer512_fill(t_buffer512 *buffer512, unsigned char *data,
 		log_warn("%s: Nothing to read into data", __FUNCTION__);
 		return ;
 	}
-	size_to_fill = 64 - buffer512->buff_bytes;
+	size_to_fill = 128 - buffer1024->buff_bytes;
 	if (size_to_fill > size - *index)
 		size_to_fill = (unsigned char)(size - *index);
-	ft_memcpy(&buffer512->buff[buffer512->buff_bytes], &data[*index],
+	ft_memcpy(&buffer1024->buff[buffer1024->buff_bytes], &data[*index],
 																size_to_fill);
 	*index = *index + size_to_fill;
-	buffer512->buff_bytes = buffer512->buff_bytes + size_to_fill;
+	buffer1024->buff_bytes = buffer1024->buff_bytes + size_to_fill;
 }

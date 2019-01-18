@@ -8,7 +8,11 @@
 		"ft_printf.h": "c",
 		"fcntl.h": "c",
 		"limits.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"iterator": "c",
+		"string": "c",
+		"string_view": "c",
+		"vector": "c"
 	},
 	"C_Cpp.errorSquiggles": "Disabled",
 }
