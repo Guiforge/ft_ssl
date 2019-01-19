@@ -85,9 +85,40 @@ $(echo -n 'foo' | shasum -a 256 | cut -d ' ' -f 1)
 $(echo 'And above all,' | shasum -a 256 | cut -d ' ' -f 1)"
 }
 
+tests_sha512()
+{
+    ft_test 'SHA512 simple test' 'echo "pickle rick" | '$BIN' sha512' $(echo 'pickle rick' | shasum -a 512 | cut -d ' ' -f 1)
+    ft_test 'SHA512' 'echo "Do not pity the dead, Harry." | '$BIN' sha512 -p' "Do not pity the dead, Harry.
+$(echo 'Do not pity the dead, Harry.' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' 'echo "Pity the living." | '$BIN' sha512 -q -r' "$(echo 'Pity the living.' | shasum -a 512 | cut -d ' ' -f 1)"
+    X_exec 'echo "And above all," > file'
+    ft_test 'SHA512' ''$BIN' sha512 file' "SHA512 (file) = $(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' ''$BIN' sha512 -r file' "$(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1) file"
+    ft_test 'SHA512' ''$BIN' sha512 -s "pity those that arent following baerista on spotify."' "SHA512 (\"pity those that arent following baerista on spotify.\") = $(echo -n 'pity those that arent following baerista on spotify.' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' 'echo "be sure to handle edge cases carefully" | '$BIN' sha512 -p file' "be sure to handle edge cases carefully
+$(echo 'be sure to handle edge cases carefully' | shasum -a 512 | cut -d ' ' -f 1)
+SHA512 (file) = $(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' 'echo "some of this will not make sense at first" | '$BIN' sha512 file' "SHA512 (file) = $(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' 'echo "but eventually you will understand" | '$BIN' sha512 -p -r file' "but eventually you will understand
+$(echo 'but eventually you will understand' | shasum -a 512 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1) file"
+    ft_test 'SHA512' 'echo "GL HF lets go" | '$BIN' sha512 -p -s "foo" file' "GL HF lets go
+$(echo 'GL HF lets go' | shasum -a 512 | cut -d ' ' -f 1)
+SHA512 (\"foo\") = $(echo -n 'foo' | shasum -a 512 | cut -d ' ' -f 1)
+SHA512 (file) = $(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1)"
+    ft_test 'SHA512' 'echo "one more thing" | '$BIN' sha512 -r -p -s "foo" file -s "bar"' "one more thing
+$(echo 'one more thing' | shasum -a 512 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 512 | cut -d ' ' -f 1) \"foo\"
+$(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1) file"
+    ft_test 'SHA512' 'echo "just to be extra clear" | '$BIN' sha512 -r -q -p -s "foo" file' "$(echo 'just to be extra clear' | shasum -a 512 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 512 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 512 | cut -d ' ' -f 1)"
+}
+
 test_main() {
 	tests_md5
 	tests_sha256
+	tests_sha512
 	echo -e "" "\033[0;32m GOOD: $GOOD, \033[0;31m FAIL: $FAIL \033[0;33m, TOT:" `expr $GOOD + $FAIL` "\033[0m"
 }
 

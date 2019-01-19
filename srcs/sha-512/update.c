@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:43:47 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 17:55:57 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/19 18:29:21 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,15 @@ void		sha512_update(t_sha512_context *cntx, unsigned char *data, size_t size)
 	buffer1024_fill(&(cntx->buffer), data, size, &index);
 	while (buffer1024_is_full(&(cntx->buffer)))
 	{
-		for(int i = 0; i < 128; i++)
-		{
-			printf("[%d] = %x\n", i, cntx->buffer.buff[i]);
-		}
-		// ft_bzero(cntx->buffer.buff, 128);
-		// for(int i = 0; i < 128; i++)
-		// {
-		// 	printf("[%d] = %x\n", i, cntx->buffer.buff[i]);
-		// 	if (i == 6)
-		// 		cntx->buffer.buff[i] = 80;
-		// 	if (i == 7)
-		// 		cntx->buffer.buff[i] = 61;
-		// 	if (i == 120)
-		// 		cntx->buffer.buff[i] = 8;
-		// }
+		buffer1024_swap64(&cntx->buffer);
 		sha512_operations(cntx);
 		buffer1024_clean(&(cntx->buffer));
 		buffer1024_fill(&(cntx->buffer), data, size, &index);
 	}
 	cntx->len += size;
-	if (cntx->len >= ULLONG_MAX || cntx->len < size)
+	if (cntx->len >= (__uint128_t)(2^128) || cntx->len < size)
 	{
-		log_error(" length is larger of 2^64");
-		cntx->len = cntx->len & 0xffffffff;
+		log_error(" length is larger of 2^128");
+		cntx->len = cntx->len & 0xffffffffffffffff;
 	}
 }

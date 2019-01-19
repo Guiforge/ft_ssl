@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 15:36:49 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/19 18:29:36 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void			sha512_operations_init_val(t_sha512_context *cntx,
 	while (i < 80)
 	{
 		if (i < 16)
-			val->data[i] = ft_swap_int64(((uint64_t *)cntx->buffer.buff)[i]);
+			val->data[i] = ((uint64_t *)cntx->buffer.buff)[i];
 		else
 			val->data[i] = sha512_ssig1(val->data[i - 2]) + val->data[i - 7] + sha512_ssig0(val->data[i - 15]) + val->data[i - 16];
 		i++;

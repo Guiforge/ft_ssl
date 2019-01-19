@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/02 21:46:13 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 15:56:02 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/19 18:52:11 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	sha512_print_prompt(t_sha512_flags flags, const char *s, t_bool is_s
 	if (flags.q || flags.r || !s)
 		return ;
 	if (is_string)
-		ft_printf(" (\"%s\") = ", s);
+		ft_printf("SHA512 (\"%s\") = ", s);
 	else
-		ft_printf(" (%s) = ", s);
+		ft_printf("SHA512 (%s) = ", s);
 }
 
 static void	sha512_print_final(t_sha512_flags flags, unsigned char sum[64],

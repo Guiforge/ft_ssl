@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 18:36:16 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/19 15:29:51 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ static	void	padding(t_sha512_context *cntx)
 	size_t			size_padd;
 	unsigned char	padd[128];
 	unsigned char	super_padd;
-	t_uint128_t		len_tmp;
+	__uint128_t		len_tmp;
 
 	super_padd = 0x80;
 	ft_bzero(padd, sizeof(padd));
 	ft_memcpy(padd, &super_padd, 1);
-	len_tmp = set_simple_uint128(cntx->len * 8, True);
-	len_tmp = ft_swap_int128(len_tmp);
+	len_tmp = (__uint128_t)ft_swap_int128((cntx->len * 8));
 	sha512_update(cntx, padd, find_padding_nb(cntx->len));
 	size_padd = 128 - cntx->buffer.buff_bytes;
 	if (size_padd >= 128 || size_padd != 16)

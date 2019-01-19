@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 15:43:33 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/19 15:32:26 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void					buffer1024_clean(t_buffer1024 *buffer1024);
 t_bool					buffer1024_is_full(t_buffer1024 *buffer1024);
 void					buffer1024_fill(t_buffer1024 *buffer1024,
 							unsigned char *data, size_t size, size_t *index);
+void					buffer1024_swap64(t_buffer1024 *b);
 
 /*
 ** SHA-512
@@ -155,7 +156,7 @@ typedef struct			s_sha256_context {
 	uint32_t			h6;
 	uint32_t			h7;
 	t_buffer512			buffer;
-	size_t				len;
+	__uint128_t			len;
 }						t_sha256_context;
 
 uint32_t				sha256_ssig0(uint32_t x);
