@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 16:29:03 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 16:49:36 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 16:24:09 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,5 @@ void	sha512_init(t_sha512_context *cntx)
 		cntx->len = 0;
 	}
 	else
-		log_fatal("Md5: error context invalid (NULL)");
+		log_fatal("Sha512: error context invalid (NULL)");
 }

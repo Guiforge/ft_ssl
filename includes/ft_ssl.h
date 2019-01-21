@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 15:43:25 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 16:18:06 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void					buffer1024_fill(t_buffer1024 *buffer1024,
 							unsigned char *data, size_t size, size_t *index);
 void					buffer1024_swap64(t_buffer1024 *b);
 
+
 /*
 ** SHA-512
 ** *****************************************************************************
@@ -152,6 +153,13 @@ ssize_t					sha512_get_sum_file(const char *filename,
 void					sha512_final(t_sha512_context *cntx,
 														unsigned char sum[64]);
 
+/*
+** SHA-512
+** *****************************************************************************
+*/
+
+void					sha384_init(t_sha512_context *cntx);
+int						sha384(int ac, const char **av);
 
 /*
 ** SHA-256
