@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 15:32:26 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 15:43:25 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define SSL_ERROR_SIZE_64 "Error size_t is not unsigned long"
 # define SSL_ERROR_PADDING "Error step Completion cannot find padding"
 # define SSL_SIZE_BUFF_READ 4096
+# define SSL_MAX_SUM_SIZE 64
 
 # define BUFFER_512_BYTES 64
 # define BUFFER_1024_BYTES 128
@@ -48,6 +49,35 @@ typedef struct			s_buffer1024 {
 	unsigned char		buff[128];
 	unsigned char		buff_bytes;
 }						t_buffer1024;
+
+typedef struct			s_digst_flags {
+	t_bool				p;
+	t_bool				q;
+	t_bool				r;
+	t_bool				s;
+}						t_digst_flags;
+
+typedef struct			s_ssl_digst {
+void					*context;
+void					(*init) (void *);
+void					(*update) (void *, unsigned char *, size_t);
+void					(*final) (void *, unsigned char *);
+size_t					size_sum;
+t_digst_flags			flags;
+char					*name;
+t_list					*lst_str;
+}						t_ssl_digst;
+
+int						digst_main(t_ssl_digst *d, int ac, const char *av[]);
+
+ssize_t					digst_get_sum_out(t_ssl_digst *digst, unsigned char sum[SSL_MAX_SUM_SIZE], t_bool print);
+ssize_t					digst_get_sum_file(t_ssl_digst *digst, const char *filename, unsigned char sum[SSL_MAX_SUM_SIZE]);
+void					digst_get_sum_string(t_ssl_digst *digst, const char *s, unsigned char sum[SSL_MAX_SUM_SIZE]);
+
+void					digst_put_sum(unsigned char *sum, int size);
+void					digst_print(t_ssl_digst *d, unsigned char *sum, const char *s);
+void					digst_print_string(t_ssl_digst *d, unsigned char *sum, const char *s);
+int						digst_parse_options(t_ssl_digst *d, int ac, char const *av[]);
 
 void					buffer512_clean(t_buffer512 *buffer512);
 t_bool					buffer512_is_full(t_buffer512 *buffer512);

@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get.c                                              :+:      :+:    :+:   */
+/*   digst_get.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/02 22:23:02 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 15:38:59 by gpouyat          ###   ########.fr       */
+/*   Created: 2019/01/21 11:15:10 by gpouyat           #+#    #+#             */
+/*   Updated: 2019/01/21 15:43:35 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 #include <fcntl.h>
 
-void		sha512_get_sum_string(const char *s, unsigned char sum[64])
+// typedef struct			s_ssl_digst {
+// 	void		*context;
+// 	void		(*init)(void *);
+// 	void		(*update)(void *, unsigned char *, size_t);
+// 	void		(*final)(void *, unsigned char *);
+
+// }						t_ssl_digst;
+
+void		digst_get_sum_string(t_ssl_digst *digst, const char *s, unsigned char sum[SSL_MAX_SUM_SIZE])
 {
-	t_sha512_context	cntx_str;
 	size_t				len;
 
 	len = ft_strlen(s);
 	log_info(" start get from string len = %u", len);
-	sha512_init(&cntx_str);
-	sha512_update(&cntx_str, (unsigned char *)s, len);
-	sha512_final(&cntx_str, sum);
+	digst->init(digst->context);
+	digst->update(digst->context, (unsigned char *)s, len);
+	digst->final(digst->context, sum);
 }
 
-ssize_t		sha512_get_sum_file(const char *filename, unsigned char sum[64])
+ssize_t		digst_get_sum_file(t_ssl_digst *digst, const char *filename, unsigned char sum[SSL_MAX_SUM_SIZE])
 {
-	t_sha512_context	cntx_file;
 	int				fd;
 	ssize_t			size;
 	unsigned char	buff[SSL_SIZE_BUFF_READ];
@@ -39,29 +45,28 @@ ssize_t		sha512_get_sum_file(const char *filename, unsigned char sum[64])
 		ft_dprintf(2, "ft_ssl: : %s: No such file or directory\n", filename);
 		return (fd);
 	}
-	sha512_init(&cntx_file);
+	digst->init(digst->context);
 	while ((size = read(fd, buff, SSL_SIZE_BUFF_READ)) && size != -1)
-		sha512_update(&cntx_file, buff, size);
+		digst->update(digst->context, buff, size);
 	close(fd);
-	sha512_final(&cntx_file, sum);
+	digst->final(digst->context, sum);
 	return (size);
 }
 
-ssize_t		sha512_get_sum_out(unsigned char sum[64], t_bool print)
+ssize_t		digst_get_sum_out(t_ssl_digst *digst, unsigned char sum[SSL_MAX_SUM_SIZE], t_bool print)
 {
-	t_sha512_context	cntx_file;
 	ssize_t			size;
-	char			buff[64];
+	char			buff[SSL_MAX_SUM_SIZE];
 
 	ft_bzero(buff, 64);
 	log_info(" start get from stdout, print:%d", print);
-	sha512_init(&cntx_file);
+	digst->init(digst->context);
 	while ((size = read(STDIN_FILENO, buff, 64)) && size != -1)
 	{
 		if (print)
 			write(STDOUT_FILENO, buff, size);
-		sha512_update(&cntx_file, (unsigned char *)buff, size);
+		digst->update(digst->context, (unsigned char *)buff, size);
 	}
-	sha512_final(&cntx_file, sum);
+	digst->final(digst->context, sum);
 	return (size);
 }

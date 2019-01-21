@@ -1,56 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_sum.c                                        :+:      :+:    :+:   */
+/*   digst_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/02 21:46:13 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/04 16:10:15 by gpouyat          ###   ########.fr       */
+/*   Created: 2019/01/21 14:32:32 by gpouyat           #+#    #+#             */
+/*   Updated: 2019/01/21 15:43:34 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-static void	md5_print_prompt(t_md5_flags flags, const char *s, t_bool is_string)
+
+static void	digst_print_prompt(t_ssl_digst *d, const char *s, t_bool is_string)
 {
-	if (flags.q || flags.r || !s)
+	if (d->flags.q || d->flags.r || !s)
 		return ;
 	if (is_string)
-		ft_printf("MD5 (\"%s\") = ", s);
+		ft_printf("%s (\"%s\") = ", d->name, s);
 	else
-		ft_printf("MD5 (%s) = ", s);
+		ft_printf("%s (%s) = ", d->name, s);
 }
 
-static void	md5_print_final(t_md5_flags flags, unsigned char sum[16],
+static void	digst_print_final(t_ssl_digst *d, unsigned char *sum,
 												const char *s, t_bool is_string)
 {
-	md5_print_prompt(flags, s, is_string);
-	md5_put_sum(sum);
-	if (flags.r && !flags.q && s && is_string)
+	digst_print_prompt(d, s, is_string);
+	digst_put_sum(sum, d->size_sum);
+	if (d->flags.r && !d->flags.q && s && is_string)
 		ft_printf(" \"%s\"", s);
-	else if (flags.r && !flags.q && s)
+	else if (d->flags.r && !d->flags.q && s)
 		ft_printf(" %s", s);
 	ft_putchar('\n');
 }
 
-void		md5_print_string(t_md5_flags flags, unsigned char sum[16],
+void		digst_print_string(t_ssl_digst *d, unsigned char *sum,
 																const char *s)
 {
-	md5_print_final(flags, sum, s, True);
+	digst_print_final(d, sum, s, True);
 }
 
-void		md5_print(t_md5_flags flags, unsigned char sum[16], const char *s)
+void		digst_print(t_ssl_digst *d, unsigned char *sum, const char *s)
 {
-	md5_print_final(flags, sum, s, False);
+	digst_print_final(d, sum, s, False);
 }
 
-void		md5_put_sum(unsigned char sum[16])
+void		digst_put_sum(unsigned char *sum, int size)
 {
 	int		i;
 
 	i = 0;
-	while (i < 16)
+	while (i < size)
 	{
 		ft_printf("%02x", sum[i]);
 		i++;

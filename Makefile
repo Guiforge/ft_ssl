@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2019/01/18 16:00:45 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/21 16:05:39 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,15 +23,15 @@ C_R = \033[1;31m
 
 SRCS			+= /ssl/main.c
 
-SRCS			+= /md5/final.c /md5/get.c /md5/init.c /md5/md5.c /md5/operations.c /md5/print_sum.c /md5/update.c
+SRCS			+= /md5/final.c /md5/init.c /md5/md5.c /md5/operations.c /md5/update.c
 
-SRCS			+= /sha-256/final.c /sha-256/get.c /sha-256/init.c /sha-256/sha256.c /sha-256/operations.c /sha-256/print_sum.c /sha-256/update.c \
+SRCS			+= /sha-256/final.c /sha-256/init.c /sha-256/sha256.c /sha-256/operations.c /sha-256/update.c \
 							/sha-256/globals_functions_sha.c /sha-256/globals_functions_sha2.c
 
-SRCS			+= /sha-512/final.c /sha-512/get.c /sha-512/init.c /sha-512/sha512.c /sha-512/operations.c /sha-512/print_sum.c /sha-512/update.c \
+SRCS			+= /sha-512/final.c /sha-512/init.c /sha-512/sha512.c /sha-512/operations.c /sha-512/update.c \
 							/sha-512/globals_functions_sha.c /sha-512/globals_functions_sha2.c
 
-SRCS			+= /misc/buffer512.c /misc/buffer1024.c
+SRCS			+= /misc/buffer512.c /misc/buffer1024.c /misc/digst_print.c /misc/digst_get.c /misc/digst_main.c /misc/digst_parse.c
 
 SRC_SUBDIR = ssl misc md5 sha-256 sha-512
 
