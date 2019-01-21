@@ -6,22 +6,15 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 11:15:10 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 15:43:35 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 16:57:16 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 #include <fcntl.h>
 
-// typedef struct			s_ssl_digst {
-// 	void		*context;
-// 	void		(*init)(void *);
-// 	void		(*update)(void *, unsigned char *, size_t);
-// 	void		(*final)(void *, unsigned char *);
-
-// }						t_ssl_digst;
-
-void		digst_get_sum_string(t_ssl_digst *digst, const char *s, unsigned char sum[SSL_MAX_SUM_SIZE])
+void		digst_get_sum_string(t_ssl_digst *digst, const char *s,\
+											unsigned char sum[SSL_MAX_SUM_SIZE])
 {
 	size_t				len;
 
@@ -32,7 +25,8 @@ void		digst_get_sum_string(t_ssl_digst *digst, const char *s, unsigned char sum[
 	digst->final(digst->context, sum);
 }
 
-ssize_t		digst_get_sum_file(t_ssl_digst *digst, const char *filename, unsigned char sum[SSL_MAX_SUM_SIZE])
+ssize_t		digst_get_sum_file(t_ssl_digst *digst, const char *filename,\
+											unsigned char sum[SSL_MAX_SUM_SIZE])
 {
 	int				fd;
 	ssize_t			size;
@@ -53,7 +47,8 @@ ssize_t		digst_get_sum_file(t_ssl_digst *digst, const char *filename, unsigned c
 	return (size);
 }
 
-ssize_t		digst_get_sum_out(t_ssl_digst *digst, unsigned char sum[SSL_MAX_SUM_SIZE], t_bool print)
+ssize_t		digst_get_sum_out(t_ssl_digst *digst,\
+							unsigned char sum[SSL_MAX_SUM_SIZE], t_bool print)
 {
 	ssize_t			size;
 	char			buff[SSL_MAX_SUM_SIZE];

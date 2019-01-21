@@ -6,12 +6,11 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 17:03:25 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:30:36 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
-
 
 static unsigned int	g_k[64] = { 0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,\
 	0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,\
@@ -40,25 +39,25 @@ static void			sha256_operations_init_val(t_sha256_context *cntx,
 	val->f = cntx->h5;
 	val->g = cntx->h6;
 	val->h = cntx->h7;
-
 	while (i < 64)
 	{
 		if (i < 16)
 			val->data[i] = ft_swap_int32(((uint32_t *)cntx->buffer.buff)[i]);
 		else
-			val->data[i] = sha256_ssig1(val->data[i - 2]) + val->data[i - 7] + sha256_ssig0(val->data[i - 15]) + val->data[i - 16];
+			val->data[i] = sha256_ssig1(val->data[i - 2]) + val->data[i - 7] +\
+							sha256_ssig0(val->data[i - 15]) + val->data[i - 16];
 		i++;
 	}
 }
 
-static void sha256_operations_loop(t_sha256_operations_value *val, unsigned char i)
+static void			sha256_operations_loop(t_sha256_operations_value *val,\
+																unsigned char i)
 {
 	uint32_t		tmp[2];
 
-	tmp[0] = val->h + sha256_bsig1(val->e) + sha256_ch(val->e, val->f, val->g) +\
-																												g_k[i] + val->data[i];
+	tmp[0] = val->h + sha256_bsig1(val->e) + sha256_ch(val->e, val->f, val->g)\
+													+ g_k[i] + val->data[i];
 	tmp[1] = sha256_bsig0(val->a) + sha256_maj(val->a, val->b, val->c);
-
 	val->h = val->g;
 	val->g = val->f;
 	val->f = val->e;
@@ -69,15 +68,13 @@ static void sha256_operations_loop(t_sha256_operations_value *val, unsigned char
 	val->a = tmp[0] + tmp[1];
 }
 
-
 void				sha256_operations(t_sha256_context *cntx)
 {
 	t_sha256_operations_value		val;
-	unsigned char								i;
+	unsigned char					i;
 
 	i = 0;
 	sha256_operations_init_val(cntx, &val);
-
 	while (i < 64)
 	{
 		sha256_operations_loop(&val, i);

@@ -6,12 +6,11 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 14:32:32 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 15:43:34 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:25:15 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
-
 
 static void	digst_print_prompt(t_ssl_digst *d, const char *s, t_bool is_string)
 {

@@ -6,15 +6,15 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/21 14:42:04 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 15:43:32 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:24:42 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-extern int			g_optind;
+extern int		g_optind;
 
-static void	digst_exec_string(t_ssl_digst *d)
+static void		digst_exec_string(t_ssl_digst *d)
 {
 	unsigned char	sum[SSL_MAX_SUM_SIZE];
 	t_list			*lst;
@@ -35,7 +35,7 @@ static void	digst_exec_string(t_ssl_digst *d)
 	}
 }
 
-static void	digst_exec_files(t_ssl_digst *d, const char **av)
+static void		digst_exec_files(t_ssl_digst *d, const char **av)
 {
 	unsigned char	sum[SSL_MAX_SUM_SIZE];
 
@@ -49,22 +49,20 @@ static void	digst_exec_files(t_ssl_digst *d, const char **av)
 	}
 }
 
-
-static int	help_usage(const char *av[])
+static int		help_usage(const char *av[])
 {
 	ft_dprintf(STDERR_FILENO, "usage: %s [-pqrh] [-s [ARG]] [file ...]", av[1]);
 	return (EXIT_FAILURE);
 }
 
-
-int		digst_main(t_ssl_digst *d, int ac, const char *av[])
+int				digst_main(t_ssl_digst *d, int ac, const char *av[])
 {
 	unsigned char	sum[SSL_MAX_SUM_SIZE];
 
 	d->lst_str = NULL;
 	if (sizeof(size_t) != 8)
 	{
-		log_fatal("%s, sizeof(size_t): %lu",  8, sizeof(size_t));
+		log_fatal("%s, sizeof(size_t): %lu", 8, sizeof(size_t));
 		return (over(SSL_ERROR_SIZE_64, EXIT_FAILURE));
 	}
 	if (digst_parse_options(d, ac, av))

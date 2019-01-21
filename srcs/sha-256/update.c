@@ -6,13 +6,14 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:43:47 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 14:20:18 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:31:19 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-void		sha256_update(t_sha256_context *cntx, unsigned char *data, size_t size)
+void		sha256_update(t_sha256_context *cntx, unsigned char *data,\
+																	size_t size)
 {
 	size_t		index;
 

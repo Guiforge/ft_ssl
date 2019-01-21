@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 17:03:14 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/08 21:53:02 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:27:05 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint32_t	sha256_ch(uint32_t x, uint32_t y, uint32_t z)
 {
-	return((x & y) ^ ( (~ x) & z));
+	return ((x & y) ^ ((~x) & z));
 }
 
 uint32_t	sha256_maj(uint32_t x, uint32_t y, uint32_t z)

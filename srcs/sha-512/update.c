@@ -6,13 +6,14 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:43:47 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 18:29:21 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:34:50 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-void		sha512_update(t_sha512_context *cntx, unsigned char *data, size_t size)
+void		sha512_update(t_sha512_context *cntx, unsigned char *data,\
+																	size_t size)
 {
 	size_t		index;
 
@@ -32,7 +33,7 @@ void		sha512_update(t_sha512_context *cntx, unsigned char *data, size_t size)
 		buffer1024_fill(&(cntx->buffer), data, size, &index);
 	}
 	cntx->len += size;
-	if (cntx->len >= (__uint128_t)(2^128) || cntx->len < size)
+	if (cntx->len >= (__uint128_t)(2 ^ 128) || cntx->len < size)
 	{
 		log_error(" length is larger of 2^128");
 		cntx->len = cntx->len & 0xffffffffffffffff;

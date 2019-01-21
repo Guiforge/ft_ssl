@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 15:48:11 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 15:06:40 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 16:56:26 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void		buffer1024_fill(t_buffer1024 *buffer1024, unsigned char *data,
 	buffer1024->buff_bytes = buffer1024->buff_bytes + size_to_fill;
 }
 
-
-void	buffer1024_swap64(t_buffer1024 *b)
+void		buffer1024_swap64(t_buffer1024 *b)
 {
 	unsigned char	index;
 	uint64_t		*cast;
@@ -53,8 +52,7 @@ void	buffer1024_swap64(t_buffer1024 *b)
 	index = 0;
 	if (!buffer1024_is_full(b))
 		log_warn("The buffer is swap but it is not full");
-	
-	while(index != 16)
+	while (index != 16)
 	{
 		cast[index] = ft_swap_int64(cast[index]);
 		index++;

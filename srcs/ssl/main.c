@@ -6,13 +6,13 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 16:36:13 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:35:54 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-static t_ssl_hash g_hashes[] = {
+static t_ssl_hash	g_hashes[] = {
 	{"md5", &md5},
 	{"sha256", &sha256},
 	{"sha512", &sha512},
@@ -21,18 +21,19 @@ static t_ssl_hash g_hashes[] = {
 	{NULL, NULL},
 };
 
-static int		help_full(int ac, const char **av)
+static int			help_full(int ac, const char **av)
 {
 	if (ac <= 1)
 		return (1);
 	ft_printf("ft_ssl:Error: '%s' is an invalid command.\n", av[1]);
 	ft_putendl("Message Digest commands\n"
-"md5               sha256            sha512            whirlpool\n"
+"md5               sha256            sha512\n"
+"sha224            sha384\n"
 "Cipher commands");
-	return(1);
+	return (1);
 }
 
-int		main(int ac, const char **av)
+int					main(int ac, const char **av)
 {
 	int		index;
 
@@ -46,5 +47,5 @@ int		main(int ac, const char **av)
 		{
 			return (g_hashes[index].f(--ac, &av[1]));
 		}
-	return(help_full(ac, av));
+	return (help_full(ac, av));
 }

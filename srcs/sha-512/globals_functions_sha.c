@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 17:03:14 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 16:00:59 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:32:23 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint64_t	sha512_ch(uint64_t x, uint64_t y, uint64_t z)
 {
-	return((x & y) ^ ( (~ x) & z));
+	return ((x & y) ^ ((~x) & z));
 }
 
 uint64_t	sha512_maj(uint64_t x, uint64_t y, uint64_t z)

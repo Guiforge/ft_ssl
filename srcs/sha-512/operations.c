@@ -6,14 +6,13 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 15:37:41 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 18:29:36 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:34:12 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/ft_ssl.h"
 
-
-static uint64_t	g_k[80] = { 0x428a2f98d728ae22, 0x7137449123ef65cd,\
+static uint64_t		g_k[80] = { 0x428a2f98d728ae22, 0x7137449123ef65cd,\
 	0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc, 0x3956c25bf348b538,\
 	0x59f111f1b605d019, 0x923f82a4af194f9b, 0xab1c5ed5da6d8118,\
 	0xd807aa98a3030242, 0x12835b0145706fbe, 0x243185be4ee4b28c,\
@@ -55,25 +54,25 @@ static void			sha512_operations_init_val(t_sha512_context *cntx,
 	val->f = cntx->h5;
 	val->g = cntx->h6;
 	val->h = cntx->h7;
-
 	while (i < 80)
 	{
 		if (i < 16)
 			val->data[i] = ((uint64_t *)cntx->buffer.buff)[i];
 		else
-			val->data[i] = sha512_ssig1(val->data[i - 2]) + val->data[i - 7] + sha512_ssig0(val->data[i - 15]) + val->data[i - 16];
+			val->data[i] = sha512_ssig1(val->data[i - 2]) + val->data[i - 7] +\
+							sha512_ssig0(val->data[i - 15]) + val->data[i - 16];
 		i++;
 	}
 }
 
-static void sha512_operations_loop(t_sha512_operations_value *val, unsigned char i)
+static void			sha512_operations_loop(t_sha512_operations_value *val,\
+																unsigned char i)
 {
 	uint64_t		tmp[2];
 
 	tmp[0] = val->h + sha512_bsig1(val->e) + sha512_ch(val->e, val->f, val->g)\
 					+ g_k[i] + val->data[i];
 	tmp[1] = sha512_bsig0(val->a) + sha512_maj(val->a, val->b, val->c);
-
 	val->h = val->g;
 	val->g = val->f;
 	val->f = val->e;
@@ -84,15 +83,13 @@ static void sha512_operations_loop(t_sha512_operations_value *val, unsigned char
 	val->a = tmp[0] + tmp[1];
 }
 
-
 void				sha512_operations(t_sha512_context *cntx)
 {
 	t_sha512_operations_value		val;
-	unsigned char								i;
+	unsigned char					i;
 
 	i = 0;
 	sha512_operations_init_val(cntx, &val);
-
 	while (i < 80)
 	{
 		sha512_operations_loop(&val, i);

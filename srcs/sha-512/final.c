@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/19 15:29:51 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:32:05 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ void			sha512_final(t_sha512_context *cntx, unsigned char data[128])
 	uint64_t	*data_cast;
 
 	padding(cntx);
-	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
+	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1,\
+					cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
 	data_cast = (uint64_t *)data;
 	data_cast[0] = ft_swap_int64(cntx->h0);
 	data_cast[1] = ft_swap_int64(cntx->h1);

@@ -175,12 +175,22 @@ $(echo -n 'foo' | shasum -a 224 | cut -d ' ' -f 1)
 $(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
 }
 
+test_iso(){
+ft_test 'SHA224 ISO file' ''$BIN' sha224 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso' "SHA224 (/sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso) = $(shasum -a 224 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso | cut -d ' ' -f 1)"
+ft_test 'SHA256 ISO file' ''$BIN' sha256 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso' "SHA256 (/sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso) = $(shasum -a 256 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso | cut -d ' ' -f 1)"
+ft_test 'SHA384 ISO file' ''$BIN' sha384 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso' "SHA384 (/sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso) = $(shasum -a 384 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso | cut -d ' ' -f 1)"
+ft_test 'SHA512 ISO file' ''$BIN' sha512 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso' "SHA512 (/sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso) = $(shasum -a 512 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso | cut -d ' ' -f 1)"
+ft_test 'MD5 ISO file' ''$BIN' md5 /sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso' "MD5 (/sgoinfre/goinfre/ISO/Debian/debian-9.6.0-amd64-netinst.iso) = 0a5352e3568bc893a9f7b65192caf1e1"
+
+}
+
 test_main() {
 	tests_md5
 	tests_sha256
 	tests_sha512
 	tests_sha384
 	tests_sha224
+	test_iso
 	echo -e "" "\033[0;32m GOOD: $GOOD, \033[0;31m FAIL: $FAIL \033[0;33m, TOT:" `expr $GOOD + $FAIL` "\033[0m"
 }
 

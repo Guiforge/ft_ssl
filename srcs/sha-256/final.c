@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:49:08 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/18 17:49:14 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 17:26:38 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void			sha256_final(t_sha256_context *cntx, unsigned char data[64])
 	uint32_t	*data_cast;
 
 	padding(cntx);
-	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1, cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
+	log_debug("final: %x, %x, %x, %x, %x, %x, %x, %x", cntx->h0, cntx->h1,\
+				cntx->h2, cntx->h3, cntx->h4, cntx->h5, cntx->h6, cntx->h7);
 	data_cast = (uint32_t *)data;
 	data_cast[0] = ft_swap_int32(cntx->h0);
 	data_cast[1] = ft_swap_int32(cntx->h1);

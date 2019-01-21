@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2019/01/21 16:34:46 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/21 17:22:55 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ ifeq ($(DEBUG), yes)
 endif
 
 ifeq ($(DEV),yes)
-    CFLAGS		+= -g
+    CFLAGS		+= -g -Wvla
 endif
 
 ifeq ($(SAN),yes)
