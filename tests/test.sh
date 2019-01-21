@@ -145,12 +145,42 @@ $(echo -n 'foo' | shasum -a 384 | cut -d ' ' -f 1)
 $(echo 'And above all,' | shasum -a 384 | cut -d ' ' -f 1)"
 }
 
+tests_sha224()
+{
+    ft_test 'SHA224 simple test' 'echo "pickle rick" | '$BIN' sha224' $(echo 'pickle rick' | shasum -a 224 | cut -d ' ' -f 1)
+    ft_test 'SHA224' 'echo "Do not pity the dead, Harry." | '$BIN' sha224 -p' "Do not pity the dead, Harry.
+$(echo 'Do not pity the dead, Harry.' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' 'echo "Pity the living." | '$BIN' sha224 -q -r' "$(echo 'Pity the living.' | shasum -a 224 | cut -d ' ' -f 1)"
+    X_exec 'echo "And above all," > file'
+    ft_test 'SHA224' ''$BIN' sha224 file' "SHA224 (file) = $(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' ''$BIN' sha224 -r file' "$(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1) file"
+    ft_test 'SHA224' ''$BIN' sha224 -s "pity those that arent following baerista on spotify."' "SHA224 (\"pity those that arent following baerista on spotify.\") = $(echo -n 'pity those that arent following baerista on spotify.' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' 'echo "be sure to handle edge cases carefully" | '$BIN' sha224 -p file' "be sure to handle edge cases carefully
+$(echo 'be sure to handle edge cases carefully' | shasum -a 224 | cut -d ' ' -f 1)
+SHA224 (file) = $(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' 'echo "some of this will not make sense at first" | '$BIN' sha224 file' "SHA224 (file) = $(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' 'echo "but eventually you will understand" | '$BIN' sha224 -p -r file' "but eventually you will understand
+$(echo 'but eventually you will understand' | shasum -a 224 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1) file"
+    ft_test 'SHA224' 'echo "GL HF lets go" | '$BIN' sha224 -p -s "foo" file' "GL HF lets go
+$(echo 'GL HF lets go' | shasum -a 224 | cut -d ' ' -f 1)
+SHA224 (\"foo\") = $(echo -n 'foo' | shasum -a 224 | cut -d ' ' -f 1)
+SHA224 (file) = $(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
+    ft_test 'SHA224' 'echo "one more thing" | '$BIN' sha224 -r -p -s "foo" file -s "bar"' "one more thing
+$(echo 'one more thing' | shasum -a 224 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 224 | cut -d ' ' -f 1) \"foo\"
+$(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1) file"
+    ft_test 'SHA224' 'echo "just to be extra clear" | '$BIN' sha224 -r -q -p -s "foo" file' "$(echo 'just to be extra clear' | shasum -a 224 | cut -d ' ' -f 1)
+$(echo -n 'foo' | shasum -a 224 | cut -d ' ' -f 1)
+$(echo 'And above all,' | shasum -a 224 | cut -d ' ' -f 1)"
+}
 
 test_main() {
 	tests_md5
 	tests_sha256
 	tests_sha512
 	tests_sha384
+	tests_sha224
 	echo -e "" "\033[0;32m GOOD: $GOOD, \033[0;31m FAIL: $FAIL \033[0;33m, TOT:" `expr $GOOD + $FAIL` "\033[0m"
 }
 

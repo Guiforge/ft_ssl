@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 16:44:59 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 16:18:06 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 16:31:51 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,14 @@ ssize_t					sha256_get_sum_file(const char *filename,
 void					sha256_final(t_sha256_context *cntx,
 														unsigned char sum[32]);
 
+
+/*
+**	sha224
+** *****************************************************************************
+*/
+
+void					sha224_init(t_sha256_context *cntx);
+int						sha224(int ac, const char **av);
 
 /*
 **	MD5

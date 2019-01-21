@@ -6,7 +6,7 @@
 #    By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/05 12:29:27 by gpouyat           #+#    #+#              #
-#    Updated: 2019/01/21 16:19:44 by gpouyat          ###   ########.fr        #
+#    Updated: 2019/01/21 16:34:46 by gpouyat          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,11 @@ SRCS			+= /sha-512/final.c /sha-512/init.c /sha-512/sha512.c /sha-512/operations
 
 SRCS			+= /sha-384/init.c /sha-384/sha384.c
 
+SRCS			+= /sha-224/init.c /sha-224/sha224.c
+
 SRCS			+= /misc/buffer512.c /misc/buffer1024.c /misc/digst_print.c /misc/digst_get.c /misc/digst_main.c /misc/digst_parse.c
 
-SRC_SUBDIR = ssl misc md5 sha-256 sha-512 sha-384
+SRC_SUBDIR = ssl misc md5 sha-256 sha-512 sha-384 sha-224
 
 ###############################################################################
 
