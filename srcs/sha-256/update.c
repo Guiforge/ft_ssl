@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/30 17:43:47 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/21 17:31:19 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/21 18:04:24 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void		sha256_update(t_sha256_context *cntx, unsigned char *data,\
 	log_debug("sha256 update, cntx->len: %lu, size data: %lu", cntx->len, size);
 	if (!data || !size || !cntx)
 	{
-		log_error("sha256 data/context invalid ptr: %#lx, size: %lu", data, size);
+		log_error("sha256 data/context invalid ptr: %#lx, size: %lu", data, \
+																		size);
 		return ;
 	}
 	buffer512_fill(&(cntx->buffer), data, size, &index);
