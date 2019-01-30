@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/25 16:54:05 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/01/30 12:23:57 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_ssl_hash	g_hashes[] = {
 	{NULL, NULL},
 };
 
-static int			help_full(char *cmd)
+static int			help_full(const char *cmd)
 {
 	if (!cmd)
 		return (1);
@@ -35,15 +35,15 @@ static int			help_full(char *cmd)
 
 static t_ssl_hash	get_hash(const char *hash)
 {
-	int			index;
+	int			i;
 
-	index = -1;
+	i = -1;
 	if (!hash)
 		return ((t_ssl_hash){NULL, NULL});
-	while (g_hashes[++index].buff != NULL)
-		if (!ft_strcmp(g_hashes[index].buff, hash))
+	while (g_hashes[++i].buff != NULL)
+		if (!ft_strncmp(g_hashes[i].buff, hash, ft_strlen(g_hashes[i].buff)))
 			break ;
-	return (g_hashes[index]);
+	return (g_hashes[i]);
 }
 
 static t_ssl_hash	read_prompt(char **line)
@@ -51,7 +51,6 @@ static t_ssl_hash	read_prompt(char **line)
 	int			ret;
 	t_ssl_hash	hash;
 
-	*line = NULL;
 	ft_putstr("ft_ssl>");
 	while ((ret = get_next_line(STDIN_FILENO, line)) && ret != -1)
 	{
@@ -65,30 +64,37 @@ static t_ssl_hash	read_prompt(char **line)
 	return (hash);
 }
 
-int					main(int ac, const char **argv)
+int				handle_stdin()
 {
 	char		*cmd;
 	t_ssl_hash	hash;
-	const char	**av;
+	char		**av;
+	int			ret;
 
-	av = argv;
+	hash = read_prompt(&cmd);
+	av = ft_strsplit(cmd, ' ');
+	if (!cmd || !av)
+		log_fatal("Malloc Error!");
+	if (hash.buff && av)
+		ret = hash.f(ft_strdbllen((const char **)av), (const char **)av);
+	else
+		help_full(cmd);
+	free(cmd);
+	ft_strdblfree(av);
+	return (-1);
+}
+
+int					main(int ac, const char **argv)
+{
+	t_ssl_hash	hash;
+
 	if (INTERN_DEBUG_FT_SSL)
 		log_init(".log", 2);
 	if (ac <= 1)
-		hash = read_prompt(&cmd);
-	else
-	{
-		cmd = ft_strdup((char *)av[1]);
-		hash = get_hash(cmd);
-		++av;
-		--ac;
-	}
+		return(handle_stdin());
+	hash = get_hash(argv[1]);
 	if (hash.buff)
-	{
-		free(cmd);
-		return (hash.f(ac, av));
-	}
-	help_full(cmd);
-	free(cmd);
+		return (hash.f(--ac, ++argv));
+	help_full(argv[1]);
 	return (-1);
 }
