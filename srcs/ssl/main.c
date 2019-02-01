@@ -6,7 +6,7 @@
 /*   By: gpouyat <gpouyat@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/22 11:31:43 by gpouyat           #+#    #+#             */
-/*   Updated: 2019/01/30 12:23:57 by gpouyat          ###   ########.fr       */
+/*   Updated: 2019/02/01 12:08:14 by gpouyat          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_ssl_hash	read_prompt(char **line)
 	return (hash);
 }
 
-int				handle_stdin()
+int					handle_stdin(void)
 {
 	char		*cmd;
 	t_ssl_hash	hash;
@@ -91,7 +91,7 @@ int					main(int ac, const char **argv)
 	if (INTERN_DEBUG_FT_SSL)
 		log_init(".log", 2);
 	if (ac <= 1)
-		return(handle_stdin());
+		return (handle_stdin());
 	hash = get_hash(argv[1]);
 	if (hash.buff)
 		return (hash.f(--ac, ++argv));
